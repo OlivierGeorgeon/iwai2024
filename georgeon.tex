@@ -1,0 +1,218 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following two lines
+% to display URLs in blue roman font according to Springer's eBook style:
+%\usepackage{color}
+%\renewcommand\UrlFont{\color{blue}\rmfamily}
+%\urlstyle{rm}
+%
+\begin{document}
+%
+\title{Reducing Prediction Error by Refining the Game Engine In The Head}
+%
+\titlerunning{GEITH Refinement}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Olivier L. Georgeon\inst{1}\orcidID{0000-1111-2222-3333} \and
+Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+%
+\authorrunning{O. Georgeon et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France 
+	\email{ogeorgeon@univ-catholyon.fr} \and
+Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+\email{lncs@springer.com}\\
+\url{http://www.springer.com/gp/computer-science/lncs} \and
+ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+\email{\{abc,lncs\}@uni-heidelberg.de}}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+We present a method for a robot to generate behaviors to refine its ``Game Engine in the Head'' (GEITH).
+The behaviors result in posterior sensory signals that carry information to refine the GEITH parameters. 
+At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
+For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
+Results show that over a few hundred interaction cycles, the robot manages to satisfactorily calibrate its GEITH, and prediction errors decrease. 
+Moreover, the robot generates behaviors that human observers describe as playful.
+
+\keywords{Active infernce  \and constructivist learning \and enaction \and intrinsic motivation \and robotics.}
+\end{abstract}
+%
+%
+%
+\section{Introduction}
+
+It is widely believed that cognitive beings possess some kind of a \textit{world model} that they use to generate intelligent behaviors.
+How they construct and maintain this world model remains, however,  an open question in cognitive science and artificial intelligence. 
+
+Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to infer the world model by minimizing free energy \cite{friston_free-energy_2010}.
+The world model is represented as a probability distribution $\mu = P(S)$ over the set $S$ of possible world states. 
+This method iteratively updates the world model after interaction through gradient descent of free energy. 
+The variational free energy amounts to the divergence between two probability distributions: the estimated world model $\mu$ and the joint probability distribution of observations and world states called the \textit{generative model}. 
+This method, however, requires that the set of states $S$ and the relations between states and observations be known \textit{a prior}. 
+Moreover, the high computational needs to compute the free energy and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
+
+The Partially Observable Markov Decision Process (POMDP) literature proposes a broad range of methods to infer a \textit{belief state} in a partially observable process.
+The belief state amounts to the agent's world model of the environment that the agent can only partially observe.  
+If the state transition function and the observation function are known \textit{a priori}, the problem of computing the belief state has been mathematically solved \cite{astrom1965optimal}. 
+It was also proven that the implementation of the solution becomes intractable as the set of states and observation grows. 
+In the absence of these presupposition, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
+
+The active inference and the POMDP literature suggests that inferring the world model through experience of interaction requires prior assumptions to reduce complexity. 
+The present study proposes the hypothesis that the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption. 
+
+Joshua Tenenbaum and his research group have proposed the GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate basic dynamics of physics and interactions. 
+In mammals, the GEITH would rest upon brain structures that are partially predefined by genes and then completed through ontogenetic development.  
+Similarly, it is possible to endow artificial agents and robots with a predefined software game engine, and expect them to refine the parameters of their game engine as they test their predictions in the world.
+
+The refinement of the game engine is measured through two methods. 
+The first is performed by the robot itself by measuring the prediction error of sensory signals. 
+Decrease in prediction errors show improvement of the game engine. 
+The second is performed by the experimenter by assessing whether the game engine parameters converge towards a target range that indicates that the robot managed to calibrate its GEITH. 
+
+fqfdqsfdqs
+fdsqfdsq
+fdqs
+
+fdqsfdqs
+
+fdqs
+
+
+fqsfqs
+
+fdqsfdqs
+
+fdqsfqs
+
+
+\section{Experimental setup}
+
+\subsection{The robotics platform}
+
+\subsection{The Game Engine In The Head}
+
+\section{Behavior generation}
+
+\section{Results}
+
+\section{Conclusion}
+
+
+
+\section{First Section}
+\subsection{A Subsection Sample}
+Please note that the first paragraph of a section or subsection is
+not indented. The first paragraph that follows a table, figure,
+equation etc. does not need an indent, either.
+
+Subsequent paragraphs, however, are indented.
+
+\subsubsection{Sample Heading (Third Level)} Only two levels of
+headings should be numbered. Lower level headings remain unnumbered;
+they are formatted as run-in headings.
+
+\paragraph{Sample Heading (Fourth Level)}
+The contribution should contain no more than four levels of
+headings. Table~\ref{tab1} gives a summary of all heading levels.
+
+\begin{table}
+\caption{Table captions should be placed above the
+tables.}\label{tab1}
+\begin{tabular}{|l|l|l|}
+\hline
+Heading level &  Example & Font size and style\\
+\hline
+Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
+1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
+2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
+3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
+4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
+\hline
+\end{tabular}
+\end{table}
+
+
+\noindent Displayed equations are centered and set on a separate
+line.
+\begin{equation}
+x + y = z
+\end{equation}
+Please try to avoid rasterized images for line-art diagrams and
+schemas. Whenever possible, use vector graphics instead (see
+Fig.~\ref{fig1}).
+
+\begin{figure}
+\includegraphics[width=\textwidth]{fig1.eps}
+\caption{A figure caption is always placed below the illustration.
+Please note that short captions are centered, while long ones are
+justified by the macro package automatically.} \label{fig1}
+\end{figure}
+
+\begin{theorem}
+This is a sample theorem. The run-in heading is set in bold, while
+the following text appears in italics. Definitions, lemmas,
+propositions, and corollaries are styled the same way.
+\end{theorem}
+%
+% the environments 'definition', 'lemma', 'proposition', 'corollary',
+% 'remark', and 'example' are defined in the LLNCS documentclass as well.
+%
+\begin{proof}
+Proofs, examples, and remarks have the initial word in italics,
+while the following text appears in normal font.
+\end{proof}
+For citations of references, we prefer the use of square brackets
+and consecutive numbers. Citations using labels or the author/year
+convention are also acceptable. The following bibliography provides
+a sample reference list with entries for journal
+articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
+book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
+and a homepage~\cite{ref_url1}. Multiple citations are grouped
+\cite{ref_article1,ref_lncs1,ref_book1},
+\cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
+
+\begin{credits}
+\subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
+used for general acknowledgments, for example: This study was funded
+by X (grant number Y).
+
+\subsubsection{\discintname}
+It is now necessary to declare any competing interests or to specifically
+state that the authors have no competing interests. Please place the
+statement with a bold run-in heading in small font size beneath the
+(optional) acknowledgments\footnote{If EquinOCS, our proceedings submission
+system, is used, then the disclaimer can be provided directly in the system.},
+for example: The authors have no competing interests to declare that are
+relevant to the content of this article. Or: Author A has received research
+grants from Company W. Author B has received a speaker honorarium from
+Company X and owns stock in Company Y. Author C is a member of committee Z.
+\end{credits}
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{splncs04}
+\bibliography{georgeon.bib}
+%
+\end{document}
