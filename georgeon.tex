@@ -66,8 +66,8 @@ How they construct and maintain this world model remains, however,  an open ques
 Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to infer the world model by minimizing \textit{free energy} \cite{friston_free-energy_2010}.
 The world model at step $t$ is represented as a probability distribution $\mu_t$ that give the probability of being in any world state $s \in S$. 
 This method iteratively updates $\mu_t$ on each interaction cycle.
-The agent selects the action that is estimated to maximize the information gained. 
-The estimation of information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
+The agent selects the action that is expected to maximize the information gained. 
+The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
 This method, however, requires that the set of states $S$ and the relations between states and observations $O$ be known \textit{a prior}. 
 Moreover, the high computational requirements to compute the free energy and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
 
