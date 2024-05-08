@@ -21,14 +21,14 @@
 %
 \begin{document}
 %
-\title{Reducing Prediction Error by Refining the Game Engine In The Head}
+\title{Reducing Prediction Error through Autonomous Intuitive-Physics Calibration}
 %
-\titlerunning{GEITH Refinement}
+\titlerunning{Autonomous GEITH Calibration}
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
 \author{Olivier L. Georgeon\inst{1}\orcidID{0000-1111-2222-3333} \and
-Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Paul Robertson\inst{2,3}\orcidID{1111-2222-3333-4444} \and
 Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
 %
 \authorrunning{O. Georgeon et al.}
@@ -46,14 +46,14 @@ ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-We present a method for a robot to generate behaviors to refine its ``Game Engine in the Head'' (GEITH).
+We present a method for an autonomous robot to generate behaviors to calibrate its intuitive-physics model also known as the ``Game Engine in the Head'' (GEITH).
 %The robot selects behaviors that yield information to refine the GEITH parameters. 
 At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
 For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
-Results show that over a few hundred interaction cycles, the robot manages to satisfactorily calibrate its GEITH, and prediction errors decrease. 
+Results show that over a few tens of interaction cycles, the robot improves its GEITH calibration and decreases its prediction errors. 
 Moreover, the robot generates behaviors that human observers describe as playful.
 
-\keywords{Active infernce  \and constructivist learning \and enaction \and intrinsic motivation \and robotics.}
+\keywords{Active infernce  \and constructivist learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
 \end{abstract}
 %
 %
@@ -61,7 +61,7 @@ Moreover, the robot generates behaviors that human observers describe as playful
 \section{Introduction}
 
 It is widely believed that cognitive beings possess some kind of a \textit{world model} that they use to generate intelligent behaviors.
-How they construct and maintain this world model remains, however,  an open question in cognitive science and artificial intelligence. 
+How they construct, maintain, and use this world model remains, however,  an open question in cognitive science and artificial intelligence. 
 
 Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to infer the world model by minimizing \textit{free energy} \cite{friston_free-energy_2010}.
 The world model at step $t$ is represented as a probability distribution $\mu_t$ that give the probability of being in any world state $s \in S$. 
@@ -94,6 +94,16 @@ The second is performed by the experimenter by assessing whether the game engine
 
 \section{Our hypothesis}
 
+\begin{figure}
+	\includegraphics[width=\textwidth]{Figure_geith.pdf}
+	\caption{The game engine within the robot's cognitive architecture.
+	Bottom: the history of interactions enacted over time.
+	Center: the working memory that implements the game engine and proposes future behaviors.
+	Left: the types of phenomena inferred trough interactive experience.
+	Top center: set of behaviors.
+	Top right: The three-dimensional emotional state based on Dopamine (DA), Serotonin (5-HT), and Noradrenaline (NA) levels.
+	Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted from simulation.} \label{fig:geith}
+\end{figure}
 
 
 
@@ -114,7 +124,6 @@ The second is performed by the experimenter by assessing whether the game engine
 	\includegraphics[width=\textwidth]{04_Compass.pdf}
 	\caption{The compass residual error decreases after step 18 when the robot starts circling around the dot.} \label{fig:compass}
 \end{figure}
-
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
