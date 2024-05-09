@@ -21,32 +21,29 @@
 %
 \begin{document}
 %
-\title{Reducing Prediction Error through Autonomous Intuitive-Physics Calibration}
+\title{Reducing Intuitive-Physics Prediction Error through Playing}
 %
-\titlerunning{Autonomous GEITH Calibration}
+\titlerunning{Reducing Prediction Error through Playing}
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{Olivier L. Georgeon\inst{1}\orcidID{0000-1111-2222-3333} \and
-Paul Robertson\inst{2,3}\orcidID{1111-2222-3333-4444} \and
-Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and
+Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
 %
-\authorrunning{O. Georgeon et al.}
+\authorrunning{Georgeon and Robertson}
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
 \institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France 
 	\email{ogeorgeon@univ-catholyon.fr} \and
-Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
-\email{lncs@springer.com}\\
-\url{http://www.springer.com/gp/computer-science/lncs} \and
-ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
-\email{\{abc,lncs\}@uni-heidelberg.de}}
+SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and
+DOLL Labs, Lexington, MA, USA\\
+\email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-We present a method for an autonomous robot to generate behaviors to calibrate its intuitive-physics model also known as the ``Game Engine in the Head'' (GEITH).
+We present a method for an autonomous robot to generate behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
 %The robot selects behaviors that yield information to refine the GEITH parameters. 
 At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
 For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
@@ -94,6 +91,11 @@ The second is performed by the experimenter by assessing whether the game engine
 
 \section{Our hypothesis}
 
+For an extended argumentation on our theoretical positioning we refer the reader to our previous article \cite{georgeon_artificial_2024}.
+We investigate the core knowledge system \cite{spelke_core_2012}.
+We implement an emotional system \cite{chebotareva_emotional_2019} based on three main neurotransmitters: dopamine, serotonin, and noradrenaline.
+The robot must follow a chain of causality to explain the prediction errors \cite{thorisson_explanation_2021}.
+
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
 	\caption{The game engine within the robot's cognitive architecture.
@@ -109,11 +111,45 @@ The second is performed by the experimenter by assessing whether the game engine
 
 \section{Experiment}
 
+The robot is based on the Osoyoo robot car \cite{osoyoo_robot_car}.
+The code is open source and shared online \cite{petitcat_github}.
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{Figure_video.pdf}
+	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
+	Left: the robot playing with a dot on the floor.
+	Top right: the robot's egocentric memory. Black segments: events of interaction with the black dot. 
+	Bottom right: allocentric memory. Black hexagon: the black dot used as a point of reference. Yellow hexagons: echo measured with the sonar. Red hexagon: the robot's focus of attention.} \label{fig:video}
+\end{figure}
+
+
 % \subsection{The robotics platform}
 
 % \subsection{The Game Engine In The Head}
 
 \section{Results}
+
+Several videos are available online. Here we analyze \cite{georgeon_petitcat_2024}.
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{01_Outcome_code.pdf}
+	\caption{Prediction error of black line detection.
+	Step 2: the robot did not expect to detect the dot.
+	Steps 17: the robot expected to detect the dot while translating forward but missed it.
+	Steps 18: the robot expected to not detect the dot while turning around but detected it.
+	Step 20: the robot did not predict detecting the dot through simulation but it did. 
+	Step 65: The robot did not expect to detect the surrounding arena. } \label{fig:yaw_pe}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{07_Forward_duration_pe.pdf}
+	\caption{Move forward duration prediction error.
+	Step 2 and 20: the forward translation was unexpectedly interrupted by the dot detection.
+	Step 17: the forward duration was longer than expected because the robot did not detect the dot.
+	From Step 21 to 64: forward duration prediction error slightly decreases. 
+	Step 65: the forward translation was unexpectedly interrupted by the detection of the arena border.} \label{fig:yaw_re}
+\end{figure}
+
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
@@ -121,13 +157,15 @@ The second is performed by the experimenter by assessing whether the game engine
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=\textwidth]{04_Compass.pdf}
-	\caption{The compass residual error decreases after step 18 when the robot starts circling around the dot.} \label{fig:compass}
+	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
+	\caption{The yaw residual error during interactions in which the robot detects the dot decreases significantly after Step 26.} \label{fig:yaw_re}
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
-	\caption{The yaw residual error during interactions in which the robot detects the dot decreases.} \label{fig:yaw_re}
+	\includegraphics[width=\textwidth]{04_Compass.pdf}
+	\caption{The compass residual error decreases after step 20 when the robot starts circling around the dot.
+	It nonetheless remains noisy due to sensor imprecision.
+	The sliding average over 10 interactions tends to 0.8° and the standard deviation to 7.4°.} \label{fig:compass}
 \end{figure}
 
 \section{Conclusion}
