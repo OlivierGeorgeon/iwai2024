@@ -74,8 +74,8 @@ If the state transition function and the observation function are known \textit{
 It was also proven that the implementation of the solution becomes intractable as the set of states and observation grows. 
 Without knowledge of the state transition and observation functions, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
 
-The active inference and the POMDP literature suggests that inferring the world model through experience of interaction requires prior assumptions to reduce complexity. 
-The present study proposes the hypothesis that the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption. 
+The active inference and the POMDP literature led us to hypothesize that inferring the world model through experience of interaction requires prior assumptions to reduce complexity. 
+The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to reduce its prediction errors. 
 
 Joshua Tenenbaum and his research group have proposed the GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate basic dynamics of physics and interactions. 
 In mammals, the GEITH would rest upon brain structures that are partially predefined by genes and then completed through ontogenetic development.  
@@ -91,9 +91,35 @@ The second is performed by the experimenter by assessing whether the game engine
 
 \section{Our hypothesis}
 
-For an extended argumentation on our theoretical positioning we refer the reader to our previous article \cite{georgeon_artificial_2024}.
+We comply with active inference theory in several regards. 
+Firstly, we do not consider sensory signals to be \textit{representational} of the environment's state. 
+Different sensory signals may come out of the same environment state depending on the agent's action. 
+This implies a ``conceptual inversion'' of the interaction cycle in which action comes first and sensory signal comes second as an  \textit{outcome} of action. 
+Secondly, we give no presupposed ontological knowledge about entities in the environment to the agent. 
+The agent must infer the existence and properties of entities by itself through patterns of interactive experience. 
+This view can be tracked back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
+Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
+We nonetheless accept to encode some \textit{prior preference distribution} on tuples $\langle$action, outcome$\rangle$ that encode ``innate'' preferences of interactions. 
+In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions} (positive or negative).
+For a deeper examination of these principles in the active inference literature, we refer the reader to our previous article \cite{georgeon_artificial_2024}.
+
+We also comply with the idea that \textit{prediction error} is a good measure of the quality of the agent's world model, and minimizing surprise is a powerful motivator. 
+Indeed, to survive, cognitive beings should generally stay away from bad surprises.
+We, however, found that learning through gradient descent of prediction error (or surprise) was not applicable to our case of a robot interacting with an open world. 
+We are investigating another approach based on an innate set of playful behaviors that the robot may select depending on its \textit{emotional state}.  
+In our case, prediction-error reduction is not a means to improve the world model but a consequence.
+
+We use Hugo Lövheim's ``cube of emotions'' \cite{lovheim_new_2012} as a basic emotional model based on three monoamines: dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) (Fig. \ref{fig:geith}, top right).
+This model associates dopamine with pleasure and reward-seeking behavior, serotonin with well-being and playful behavior, and nor-adrenaline with arousal and stress responses.
+It has been successfully used for simple emotional robotics.
+For example, Max Talanov and his team generated basic emotional behaviors easily interpretable by human observers \cite{chebotareva_emotional_2019}. 
+They showed that the observer's understanding of the robot's behavior was improved when the robot displayed its internal emotional state through an intuitive color code related to the prevalence of one of the three neurotransmitters, green: dopamine, white: serotonin, red: nor-adrenaline, and blue when all three neurotransmitter levels were low. 
+
+The cognitive architecture is seeded with innate behaviors. 
+This study does not examine the learning of new sequences of behaviors (this was the object of other studies \cite{georgeon_cash_2019}) but only the learning of parameters. 
+
 We investigate the core knowledge system \cite{spelke_core_2012}.
-We implement an emotional system \cite{chebotareva_emotional_2019} based on three main neurotransmitters: dopamine, serotonin, and noradrenaline.
+
 The robot must follow a chain of causality to explain the prediction errors \cite{thorisson_explanation_2021}.
 
 \begin{figure}
@@ -103,7 +129,7 @@ The robot must follow a chain of causality to explain the prediction errors \cit
 	Center: the working memory that implements the game engine and proposes future behaviors.
 	Left: the types of phenomena inferred trough interactive experience.
 	Top center: set of behaviors.
-	Top right: The three-dimensional emotional state based on Dopamine (DA), Serotonin (5-HT), and Noradrenaline (NA) levels.
+	Top right: The three-dimensional emotional state based on dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) levels.
 	Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted from simulation.} \label{fig:geith}
 \end{figure}
 
@@ -111,14 +137,27 @@ The robot must follow a chain of causality to explain the prediction errors \cit
 
 \section{Experiment}
 
-The robot is based on the Osoyoo robot car \cite{osoyoo_robot_car}.
+We designed a robotic platform called Petitcat based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+For this experiment, we added an Inertial Measurement Unit (IMU) and an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
+
+The C++ software running on the Arduino board controls the enaction of the sensorimotor loops. 
+A personal computer implements the GEITH and the cognitive architecture that remote controls the robot through wifi.
 The code is open source and shared online \cite{petitcat_github}.
+
+The levels of all three neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails when DA = 5-HT = NA.
+Prevalence of DA makes Petitcat initially select the \texttt{move forward} behavior that is intrinsically rewarding.
+When he encounters a new object, 5-HT increases to MAX-5-HT. Prevalence of 5-HT triggers the selection of playful interactions with this object.
+On each  \texttt{play} interaction, if the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases by 1.
+When 5-HT decreases below or equal to DA, exploration behaviors are again selected meaning that Petitcat disinterests from the object and goes exploring new destinations. 
+During play, when Petitcat unexpectedly fails to detect the object, NA increases to MAX-NA, which causes the selection of \texttt{search} behaviors. 
+DA then decreases of 1 on each interaction or is reset to MIN-NA when Petitcat finds the object again.  
+
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
 	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
-	Left: the robot playing with a dot on the floor.
-	Top right: the robot's egocentric memory. Black segments: events of interaction with the black dot. 
+	Left: Petitcat playing with a black dot on the floor.
+	Top right: Petitcat's egocentric memory. Black segments: black dot detection events. 
 	Bottom right: allocentric memory. Black hexagon: the black dot used as a point of reference. Yellow hexagons: echo measured with the sonar. Red hexagon: the robot's focus of attention.} \label{fig:video}
 \end{figure}
 
@@ -170,6 +209,9 @@ Several videos are available online. Here we analyze \cite{georgeon_petitcat_202
 
 \section{Conclusion}
 
+We are not claiming the robot can actually \textit{experience} emotions let alone have sentience. 
+His internal model of emotions, nonetheless, helps generate behaviors that human observers easily interpret as lifelike. 
+The emotional indicator facilitates this interpretation. 
 
 \begin{credits}
 
