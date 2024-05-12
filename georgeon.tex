@@ -189,7 +189,7 @@ We added an Inertial Measurement Unit (IMU) and an RGB LED as the emotion indica
 	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
 		Left: Petitcat playing with a point made of a piece of black tape on the floor.
 		Top right: Petitcat's egocentric memory. Black segments: black tape detection events. 
-		Bottom right: allocentric memory. Black hexagon: the black point used as a point of reference. Yellow hexagons: echo measured with the sonar. Red hexagon: the robot's focus of attention.} \label{fig:video}
+		Bottom right: allocentric memory. Black hexagon: the point phenomenon used as a reference frame. Yellow hexagons: echo measured with the sonar. Red hexagon: focus of attention.} \label{fig:video}
 \end{figure}
 
 The C++ software running on the Arduino board controls the enaction of primitive interactions. 
@@ -224,35 +224,40 @@ The GEITH tries to simulate them, computes their spatio-temporal attributes acco
 
 The levels of the neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
 Prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive valence.
-When he detects a point (by surprise), 5-HT increases its max value. 
+When he detects a point (by surprise), 5-HT increases to its max. 
 Prevalence of 5-HT and the presence of a point phenomenon in memory triggers the selection of the innate interactions with the point.
 If the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases.
 When 5-HT drops below or equal to DA, the  $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction is again selected causing Petitcat to go explore new destinations. 
 
 Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
 Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
-Failing primitive interactions cause the composite interaction to which they belong to abort, and the DA level to increase to MAX\_DA.
+Failing primitive interactions cause the composite interaction to which they belong to abort, and the DA level to increase to its max.
 
 The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point to compute the spatio-temporal attributes of interactions (Fig. \ref{fig:geith}, center). 
-When Petitcat interacts with a point, he focuses its attention to the place where the phenomenon is localized in spatial memory. 
-A failure to interact with the point means that the localization of the point phenomenon in memory is erroneous. 
+When Petitcat interacts with a point, the GEITH places the focus of attention at the place of the phenomenon. 
+A failure to interact with the point means that the localization of the phenomenon in memory is erroneous. 
 %generally due to drift caused by inaccuracy in the GEITH parameters and the spatio-temporal measures. 
-The high DA level that occurs in this case causes the GEITH to moves the focus of attention to neighboring locations in search for the point.
-Neighboring points compete to be selected based on their distance to the last detected position of the phenomenon and the last time they were visited.
-DA then progressively decreases or is reset to 50 if Petitcat finds the point again. 
+The high DA level that occurs in case of failure causes the GEITH to moves the focus of attention to another cell in phenomenon-centric memory in search for the point.
+Cells compete to catch the focus with preference given to those closer to the last detected position of the phenomenon but having gone the longest period since last being visited.
+The interactions with the point continue afterward using focus on different cells. 
+DA progressively decreases or is reset to 50 if Petitcat finds the point again. 
 
-%Prediction errors may be caused by inaccuracies in the GEITH parameters and in the measurements, or changes in the environment. 
+In addition to the number of failed interactions, we also expect the prediction errors of the yaw and of the forward duration to decrease as the GEITH adjusts its parameters. 
+Our GEITH has about 20 parameters but this experiment only involves \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
+Note that the GEITH has no means to infer the absolute values of these parameters but can only adjust them in relation to one another.
+The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor which will cause a withdrawal with rotation. The GEITH can only make the robot aim strait at the point and thus always predicts straight withdrawal. 
 
+Ideally, we would like the GEITH to find by itself the relation of causality from parameters to prediction errors, but in this experiment, we provided this relation.
 
 
 \section{Results}
 
-Several videos are available online. 
-Here we analyze a representative run recorded on video \cite{georgeon_petitcat_2024}.
+Several videos of experiment runs are available online. 
+Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{01_Outcome_code.pdf}
-	\caption{Prediction error of black phenomenon detection.
+	\caption{Prediction error of point detection.
 	Step 2: the robot did not expect to detect the point.
 	Steps 17: the robot expected to detect the point while translating forward but missed it.
 	Steps 18: the robot expected to not detect the point while turning around but detected it.
@@ -262,7 +267,7 @@ Here we analyze a representative run recorded on video \cite{georgeon_petitcat_2
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{07_Forward_duration_pe.pdf}
-	\caption{Move forward duration prediction error.
+	\caption{Forward duration prediction error.
 	Step 2 and 20: the forward translation was unexpectedly interrupted by the point detection.
 	Step 17: the forward duration was longer than expected because the robot did not detect the point.
 	From Step 21 to 64: forward duration prediction error slightly decreases. 
