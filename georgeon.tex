@@ -143,6 +143,21 @@ We seeded the cognitive architecture with ``innate'' composite interactions (Fig
 Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
 The cognitive architecture uses variables that represent the robot's \textit{emotional state} to selects composite interactions to try to enact.
 
+\begin{figure}
+	\includegraphics[width=\textwidth]{Figure_geith.pdf}
+	\caption{The game engine within the cognitive architecture.
+		Bottom: the history of interactions enacted over time.
+		Leftward triangles: \texttt{forward}. Rightward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. Light-blue: \texttt{no\_tape}. Black: \texttt{tape}.
+		Center: the GEITH.
+		Red hexagon: the focus of attention localized at the position of the point phenomenon. 
+		Magenta hexagon: the prompt is the localization of the next selected interaction's destination: \texttt{swipe} to the right.
+		Left: the types of phenomena inferred trough interactive experience.
+		Solid objects, walls, and other robots are detected by the echo-localization sensor but not used in this experiment.
+		Top center: predefined composite interactions.
+		Top right: three-dimensional emotional state based on dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA).
+		Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted by the GEITH.} \label{fig:geith}
+\end{figure}
+
 We use Hugo Lövheim's ``cube of emotions'' \cite{lovheim_new_2012} as a basic emotional model based on three neurotransmitters: dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) (Fig. \ref{fig:geith}, top right).
 This model associates dopamine with pleasure and reward-seeking behavior, serotonin with well-being and playful behavior, and nor-adrenaline with arousal and stress responses.
 It has been successfully used for simple emotional robotics.
@@ -159,33 +174,21 @@ We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribut
 As we shall see in the experiment presented next, prediction errors may have a variety of causes sometimes difficult to untangle. 
 Again, we are looking for core systems of causal explanation that may have evolved in the brain.
 The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
-Explanation may also involve a confrontation between proponent and opponent arguments, and interaction with the world to arbitrate. 
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{Figure_geith.pdf}
-	\caption{The game engine within the robot's cognitive architecture.
-	Bottom: the history of interactions enacted over time.
-	Center: the working memory that implements the game engine and proposes future behaviors.
-	Left: the types of phenomena inferred trough interactive experience.
-	Top center: set of behaviors.
-	Top right: The three-dimensional emotional state based on dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) levels.
-	Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted from simulation.} \label{fig:geith}
-\end{figure}
-
+Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
 
 
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{In this section, we personalize the robot by its name Petitcat and the pronoun ``he''. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters and some readers.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+We designed a robotic platform called Petitcat\footnote{In this section, we personalize the robot by its name Petitcat and the pronoun ``he''. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
 %For this experiment, 
 We added an Inertial Measurement Unit (IMU) and an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
 	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
-		Left: Petitcat playing with a point on the floor.
-		Top right: Petitcat's egocentric memory. Black segments: black point detection events. 
+		Left: Petitcat playing with a point made of a piece of black tape on the floor.
+		Top right: Petitcat's egocentric memory. Black segments: black tape detection events. 
 		Bottom right: allocentric memory. Black hexagon: the black point used as a point of reference. Yellow hexagons: echo measured with the sonar. Red hexagon: the robot's focus of attention.} \label{fig:video}
 \end{figure}
 
@@ -202,15 +205,16 @@ For this experiment, we defined four possible commands: \texttt{forward}, \textt
 %they have been separated rather than using a direction attribute because they are conceptually different: moving toward or away from a target. 
 
 The control loop monitors the luminosity of the floor, the yaw, and the distance of echo signals during the enaction of interactions. 
-The termination conditions of the primitive interactions are reaching the target yaw or duration, or detecting a black tape on the floor, making two possible outcomes: \texttt{tape} or \texttt{no\_tape}, which gives eight primitive interactions (4 commands $\times$ 2 outcomes).
-All interactions were given a null prior valence except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ that has a positive one.
+The termination conditions are reaching the target yaw or duration, or detecting a black tape on the floor, making two possible outcomes: \texttt{tape} or \texttt{no\_tape}, which gives eight primitive interactions (4 commands $\times$ 2 outcomes).
+Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
+All interactions are given a null prior valence except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ that has a positive one.
 Additionally, the robot returns the measured spatial attributes to the GEITH: measured duration (float), measured yaw (float), and the direction of the black tape detection if any (none, left, front, right). 
 
 When the black tape is detected, a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
 When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape.
 
-We seeded the cognitive architecture with the four ``playful'' composite interactions below. 
-The GEITH tries to simulate them, computes their spatio-temporal attributes, and proposes those that are feasible in the current context.
+We seeded the cognitive architecture with the four composite interactions below, which constitute ``innate'' manners for Petitcat to interact with points. 
+The GEITH tries to simulate them, computes their spatio-temporal attributes according to the position of the phenomenon in memory, and proposes those that are feasible in the current context.
 \begin{enumerate}
 	\item $\langle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
 	\item $\langle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
@@ -218,22 +222,28 @@ The GEITH tries to simulate them, computes their spatio-temporal attributes, and
 	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$. 
 \end{enumerate}
 
-When the actual outcome differs from the expected outcome, the tentative enaction of the primitive interaction is considered a failure and the enaction of the composite interaction is interrupted. 
-This happens either when the GEITH predicted a tape detection that did not happen or the reverse. 
+The levels of the neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
+Prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive valence.
+When he detects a point (by surprise), 5-HT increases its max value. 
+Prevalence of 5-HT and the presence of a point phenomenon in memory triggers the selection of the innate interactions with the point.
+If the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases.
+When 5-HT drops below or equal to DA, the  $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction is again selected causing Petitcat to go explore new destinations. 
 
-The levels of all three neurotransmitters can vary from 0 to 100 and are initialized at 50 (DA prevails in case of draw).
-Prevalence of DA makes Petitcat initially select the \texttt{forward} interaction because it has a positive valence.
-When he detects a point, 5-HT increases to MAX-5-HT. Prevalence of 5-HT triggers the selection of playful interactions with this point.
-On each playful interaction, if the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases by 1.
-When 5-HT decreases below or equal to DA, the  $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction is again selected meaning that Petitcat disinterests from the point and goes exploring new destinations. 
-During play, when Petitcat unexpectedly fails to detect the point, NA increases to MAX-NA, which causes the selection of \texttt{search} behaviors. 
-DA then decreases of 1 on each interaction or is reset to MIN-NA when Petitcat finds the point again.  
+Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
+Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
+Failing primitive interactions cause the composite interaction to which they belong to abort, and the DA level to increase to MAX\_DA.
+
+The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point to compute the spatio-temporal attributes of interactions (Fig. \ref{fig:geith}, center). 
+When Petitcat interacts with a point, he focuses its attention to the place where the phenomenon is localized in spatial memory. 
+A failure to interact with the point means that the localization of the point phenomenon in memory is erroneous. 
+%generally due to drift caused by inaccuracy in the GEITH parameters and the spatio-temporal measures. 
+The high DA level that occurs in this case causes the GEITH to moves the focus of attention to neighboring locations in search for the point.
+Neighboring points compete to be selected based on their distance to the last detected position of the phenomenon and the last time they were visited.
+DA then progressively decreases or is reset to 50 if Petitcat finds the point again. 
+
+%Prediction errors may be caused by inaccuracies in the GEITH parameters and in the measurements, or changes in the environment. 
 
 
-
-% \subsection{The robotics platform}
-
-% \subsection{The Game Engine In The Head}
 
 \section{Results}
 
