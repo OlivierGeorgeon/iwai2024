@@ -78,8 +78,7 @@ In essence, at each instant, the agent estimates which states are the most or le
 %The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
 Active inference has been used in robotics \cite{lanillos_active_2021} but significant challenges remain when the robot is expected to explore an open world. 
 Most of active inference mathematical apparatus requires that the set of all world states and the relations between states and observations be known \textit{a priori}---an assumption that we avoid in the present study. %$S$ 
-%The relations between states and observations must also be known \textit{a priori}, which we prefer to avoid.
-Moreover, computing the free energy remains too computationally intensive for our robotics experiment.
+%Moreover, computing the free energy remains too computationally intensive for our robotics experiment.
 %remain; however to  and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
 
 The POMDP and active inference literature led us to hypothesize that inferring the world model through experience of interaction requires prior assumptions to reduce complexity \cite{georgeon_artificial_2024}. 
@@ -166,10 +165,11 @@ It has been successfully used for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code developed by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
 The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{phenomenon-centric} (Fig. \ref{fig:geith}, center).  
-The robot's displacements are tracked in the egocentric reference frame using the translation speed given as a parameter of the GEITH and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system. 
-Using spatial-displacement information, the GEITH updates the position of the recent history of interactions in egocentric memory (Fig. \ref{fig:video}, top right).
+The robot's displacements and interactoins are tracked in the egocentric reference frame using the translation speed given as a parameter of the GEITH and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
+%Using spatial-displacement information, the GEITH updates the position of the recent history of interactions in egocentric memory 
+(Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
-This mechanism of coordinate conversion relates to that implemented by Howard Schneider's in his Causal Cognitive Architecture \cite{schneider_enabling_2020}, and to 
+This mechanism of coordinate conversion relates to that implemented by Howard Schneider's in his Causal Cognitive Architecture \cite{schneider_emergence_2024}, and to 
 Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according to which the brain records thousands of small spatial models to memorize interactions with different kinds of objects.
 We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
@@ -183,7 +183,7 @@ Explanation may also involve a confrontation between proponent and opponent argu
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{We personalize the robot by his name Petitcat and his pronoun. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+We designed a robotic platform called Petitcat\footnote{We personalize the robot by his name Petitcat and his pronoun. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters, and, we hope, facilitate the reading.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
 This experiment, uses only two sensors.
 The ``floor luminosity sensor'' is a bar of 5 infrared-reflective sensors directed to the floor from which we retrieve 4 possible states:  \texttt{none},  \texttt{left},  \texttt{front},  \texttt{right} indicating the possible presence of a black tape beneath them.  
 The IMU measures the yaw during the enaction of interactions.
