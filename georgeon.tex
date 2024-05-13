@@ -43,7 +43,7 @@ DOLL Labs, Lexington, MA, USA\\
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-We present a method for an autonomous robot to generate behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
+We present an autonomous robot that generates behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
 %The robot selects behaviors that yield information to refine the GEITH parameters. 
 At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
 For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
@@ -76,9 +76,9 @@ In essence, at each instant, the agent estimates which states are the most or le
 %This method iteratively updates $\mu_t$ on each interaction cycle.
 %The agent selects the action that is expected to maximize the information gained to refine the probability distribution. 
 %The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
-This method, however, requires that the set of all world states %$S$ 
-be known \textit{a prior}, which is not the case of robots in the open world.
-The relations between states and observations must also be known \textit{a priori}, which we prefer to avoid.
+Active inference has been used in robotics \cite{lanillos_active_2021} but significant challenges remain when the robot is expected to explore an open world. 
+Most of active inference mathematical apparatus requires that the set of all world states and the relations between states and observations be known \textit{a priori}---an assumption that we avoid in the present study. %$S$ 
+%The relations between states and observations must also be known \textit{a priori}, which we prefer to avoid.
 Moreover, computing the free energy remains too computationally intensive for our robotics experiment.
 %remain; however to  and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
 
@@ -102,14 +102,16 @@ The second is performed by the experimenter by assessing whether the game engine
 
 We comply with active inference theory in several regards. 
 Firstly, we do not consider sensory signals to be \textit{representational} of the environment's state. 
-Different sensory signals may come out of the same environment state depending on the agent's action. 
+%Different sensory signals may come out of the same environment state depending on the agent's action. 
+% Each state of the world can generate different sensory signals depending on the action performed by the agent.
+The world state is hidden to the agent so that a given state can return opposite sensory signals when acted upon differently by the agent.
 This implies a ``conceptual inversion'' of the interaction cycle in which action comes first and sensory signal comes second as an  \textit{outcome} of action. 
-Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the environment. 
+Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the world. 
 The agent must infer the existence and properties of entities by itself through patterns of interactive experience. 
 This view can be tracked back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
-We nonetheless accept to associate some \textit{prior preference valences} with interactions. 
-In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions} (positive or negative).
+We nonetheless may associate some \textit{prior preference} with interactions. 
+In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
 For a deeper examination of these principles in relation with the active inference literature, we refer the reader to our previous article \cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
@@ -121,7 +123,7 @@ For us, prediction-error reduction is not a means to improve the world model but
 
 We are using a cognitive architecture that we designed previously based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
 The present article reports the integration of the new GEITH module within this cognitive architecture as illustrated in Figure \ref{fig:geith}. 
-The GEITH supports the simulation of interactive behaviors before their selection by the cognitive architecture and their enaction by the robot. 
+The GEITH supports the simulation of behaviors before their selection by the cognitive architecture and their enaction by the robot. 
 At the beginning of each interaction cycle, the simulation computes the \textit{predicted outcome}.
 At the end of the interaction cycle, the predicted outcome is compared with the \textit{actual outcome} to compute the prediction error.   
 We investigate the core elements of the GEITH that are needed for the agent to reduce prediction error. 
@@ -132,7 +134,7 @@ For example, Elizabeth Spelke and her colleagues argued for the existence of two
 We start by implementing the minimal requirements she deems necessary for both systems, namely the ability to handle points and lines in spatial memory, the foundational elements of Euclidean geometry. 
 
 Our cognitive architecture encodes behaviors as \textit{composite interactions} which are sequences of \textit{primitive interactions}.
-A primitive interaction is a specification of a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and preference valence. 
+A primitive interaction is a specification of a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
 Examples are in Section \ref{sec:expe}. 
 The GEITH may consider some outcomes as resulting from the interaction with ``something'' in the environment.
 In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatial memory.
@@ -147,9 +149,9 @@ The cognitive architecture uses variables that represent the robot's \textit{emo
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
 	\caption{The game engine within the cognitive architecture.
 		Bottom: the history of interactions enacted over time.
-		Leftward triangles: \texttt{forward}. Rightward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. Light-blue: \texttt{no\_tape}. Black: \texttt{tape}.
+		Rightward triangles: \texttt{forward}. Leftward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. Light-blue: \texttt{no\_tape}. Black: \texttt{tape}.
 		Center: the GEITH.
-		Red hexagon: the focus of attention localized at the position of the point phenomenon. 
+		Red hexagon: the focus of attention localized at the position of the phenomenon. 
 		Magenta hexagon: the prompt is the localization of the next selected interaction's destination: \texttt{swipe} to the right.
 		Left: the types of phenomena inferred trough interactive experience.
 		Solid objects, walls, and other robots are detected by the echo-localization sensor but not used in this experiment.
@@ -164,14 +166,15 @@ It has been successfully used for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code developed by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
 The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{phenomenon-centric} (Fig. \ref{fig:geith}, center).  
-The robot's displacements are tracked in the egocentric reference frame using an Inertial Measurement Unit that plays a similar role as the vestibular system. 
+The robot's displacements are tracked in the egocentric reference frame using the translation speed given as a parameter of the GEITH and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system. 
 Using spatial-displacement information, the GEITH updates the position of the recent history of interactions in egocentric memory (Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
 This mechanism of coordinate conversion relates to that implemented by Howard Schneider's in his Causal Cognitive Architecture \cite{schneider_enabling_2020}, and to 
 Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according to which the brain records thousands of small spatial models to memorize interactions with different kinds of objects.
 We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
-As we shall see in the experiment presented next, prediction errors may have a variety of causes sometimes difficult to untangle. 
+%As we shall see in the experiment presented next, 
+Prediction errors may have a variety of causes sometimes difficult to untangle. 
 Again, we are looking for core systems of causal explanation that may have evolved in the brain.
 The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
 Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
@@ -180,9 +183,14 @@ Explanation may also involve a confrontation between proponent and opponent argu
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{In this section, we personalize the robot by its name Petitcat and the pronoun ``he''. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
-%For this experiment, 
-We added an Inertial Measurement Unit (IMU) and an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
+We designed a robotic platform called Petitcat\footnote{We personalize the robot by his name Petitcat and his pronoun. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+This experiment, uses only two sensors.
+The ``floor luminosity sensor'' is a bar of 5 infrared-reflective sensors directed to the floor from which we retrieve 4 possible states:  \texttt{none},  \texttt{left},  \texttt{front},  \texttt{right} indicating the possible presence of a black tape beneath them.  
+The IMU measures the yaw during the enaction of interactions.
+Note that Petitcat cannot ``see'' the tape from a distance. 
+What looks like eyes on his head is an echo-localization sensor not used in this experiment. 
+He has no camera, lidar or odometer.
+We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
@@ -199,16 +207,17 @@ The robot tries to enact it and sends the outcome back to the PC.
 The code is open source and shared online \cite{petitcat_github}.
 
 For this experiment, we defined four possible commands: \texttt{forward}, \texttt{backward}, \texttt{swipe}, and \texttt{turn}. 
-\texttt{Turn} consists in turning in place. Its spatio-temporal attribute is the target yaw (float), negative when counter-trigonometric. 
-\texttt{Swipe} is a lateral translation. Its spatio-temporal attributes are the direction (left or right) and target duration (float). 
 \texttt{Forward} and \texttt{backward} are longitudinal translations. Their spatio-temporal attribute is the target duration (float).   
+\texttt{Swipe} is a lateral translation. Its spatio-temporal attributes are the direction (left or right) and target duration (float). 
+\texttt{Turn} consists in turning in place. Its spatio-temporal attribute is the target yaw (float), negative when counter-trigonometric. 
 %they have been separated rather than using a direction attribute because they are conceptually different: moving toward or away from a target. 
 
-The control loop monitors the luminosity of the floor, the yaw, and the distance of echo signals during the enaction of interactions. 
-The termination conditions are reaching the target yaw or duration, or detecting a black tape on the floor, making two possible outcomes: \texttt{tape} or \texttt{no\_tape}, which gives eight primitive interactions (4 commands $\times$ 2 outcomes).
-Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
-All interactions are given a null prior valence except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ that has a positive one.
-Additionally, the robot returns the measured spatial attributes to the GEITH: measured duration (float), measured yaw (float), and the direction of the black tape detection if any (none, left, front, right). 
+The control loop monitors the floor luminosity and the yaw. %, and the distance of echo signals during the enaction of interactions. 
+The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{tape} or \texttt{no\_tape}, which gives eight primitive interactions (4 commands $\times$ 2 outcomes).
+Primitive interactions are identified by their tuple $\langle$command, outcome$\rangle$.
+% Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
+All interactions are given a null prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
+Additionally, the robot returns the measured spatial attributes to the GEITH: measured duration (float), measured yaw (float), and floor luminosity indication (none, left, front, right). 
 
 When the black tape is detected, a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
 When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape.
@@ -223,7 +232,7 @@ The GEITH tries to simulate them, computes their spatio-temporal attributes acco
 \end{enumerate}
 
 The levels of the neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
-Prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive valence.
+Prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive prior preference.
 When he detects a point (by surprise), 5-HT increases to its max. 
 Prevalence of 5-HT and the presence of a point phenomenon in memory triggers the selection of the innate interactions with the point.
 If the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases.
@@ -237,17 +246,17 @@ The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point t
 When Petitcat interacts with a point, the GEITH places the focus of attention at the place of the phenomenon. 
 A failure to interact with the point means that the localization of the phenomenon in memory is erroneous. 
 %generally due to drift caused by inaccuracy in the GEITH parameters and the spatio-temporal measures. 
-The high DA level that occurs in case of failure causes the GEITH to moves the focus of attention to another cell in phenomenon-centric memory in search for the point.
+The high DA level that occurs in case of failure causes the GEITH to move the focus of attention to another cell in phenomenon-centric memory in search for the point.
 Cells compete to catch the focus with preference given to those closer to the last detected position of the phenomenon but having gone the longest period since last being visited.
-The interactions with the point continue afterward using focus on different cells. 
-DA progressively decreases or is reset to 50 if Petitcat finds the point again. 
+The interactions with the point continue afterward based on focus in different cells. 
+DA is reset to 50 if Petitcat finds the lost point, otherwise it progressively decreases until it drops below 50 causing Petitcat to abandon the search. 
 
 In addition to the number of failed interactions, we also expect the prediction errors of the yaw and of the forward duration to decrease as the GEITH adjusts its parameters. 
 Our GEITH has about 20 parameters but this experiment only involves \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
 Note that the GEITH has no means to infer the absolute values of these parameters but can only adjust them in relation to one another.
 The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor which will cause a withdrawal with rotation. The GEITH can only make the robot aim strait at the point and thus always predicts straight withdrawal. 
 
-Ideally, we would like the GEITH to find by itself the relation of causality from parameters to prediction errors, but in this experiment, we provided this relation.
+Ideally, we would like the GEITH to find by itself the relations of causality that link parameters to prediction errors, but in this experiment, we predefined these relations.
 
 
 \section{Results}
@@ -285,12 +294,12 @@ Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}
 	\caption{The yaw residual error during interactions in which the robot detects the point decreases significantly after Step 26.} \label{fig:yaw_re}
 \end{figure}
 
-\begin{figure}
-	\includegraphics[width=\textwidth]{04_Compass.pdf}
-	\caption{The compass residual error decreases after step 20 when the robot starts circling around the point.
-	It nonetheless remains noisy due to sensor imprecision.
-	The sliding average over 10 interactions tends to 0.8° and the standard deviation to 7.4°.} \label{fig:compass}
-\end{figure}
+%\begin{figure}
+%	\includegraphics[width=\textwidth]{04_Compass.pdf}
+%	\caption{The compass residual error decreases after step 20 when the robot starts circling around the point.
+%	It nonetheless remains noisy due to sensor imprecision.
+%	The sliding average over 10 interactions tends to 0.8° and the standard deviation to 7.4°.} \label{fig:compass}
+%\end{figure}
 
 \section{Conclusion}
 
