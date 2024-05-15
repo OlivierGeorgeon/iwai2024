@@ -135,7 +135,7 @@ For example, Elizabeth Spelke and her colleagues argued for the existence of two
 We start by implementing the minimal requirements she deems necessary for both systems, namely the ability to handle points and lines in spatial memory, the foundational elements of Euclidean geometry. 
 
 Our cognitive architecture encodes behaviors as \textit{composite interactions} which are sequences of \textit{primitive interactions}.
-A primitive interaction is a specification of a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
+A primitive interaction is a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
 Examples are in Section \ref{sec:expe}. 
 The GEITH may consider some outcomes as resulting from the interaction with ``something'' in the environment.
 In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatial memory.
@@ -156,7 +156,7 @@ The cognitive architecture uses variables that represent the robot's \textit{emo
 		Magenta hexagon: the prompt is the localization of the next selected interaction's destination: \texttt{swipe} to the right.
 		Left: the types of phenomena inferred trough interactive experience.
 		Solid objects, walls, and other robots are detected by the echo-localization sensor but not used in this experiment.
-		Top center: predefined composite interactions.
+		Top center: predefined composite interactions and GEITH parameters.
 		Top right: three-dimensional emotional state based on dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA).
 		Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted by the GEITH.} \label{fig:geith}
 \end{figure}
@@ -166,41 +166,32 @@ This model associates dopamine with pleasure and reward-seeking behavior, seroto
 It has been successfully used for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code developed by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
-The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{phenomenon-centric} (Fig. \ref{fig:geith}, center).  
-The robot's displacements and interactions are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
+The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
+The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
 %Using spatial-displacement information, the GEITH updates the position of the recent history of interactions in egocentric memory 
 (Fig. \ref{fig:video}, top right).
-When the robot encounters a new phenomenon, the GEITH instantiates a new reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
+When the robot encounters a new phenomenon, the GEITH instantiates a new allocentric reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
 This mechanism of coordinate conversion relates to that implemented by Howard Schneider's in his Causal Cognitive Architecture \cite{schneider_emergence_2024}, and to 
 Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according to which the brain records thousands of small spatial models to memorize interactions with different kinds of objects.
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
+Once the robot has selected an object in the environment, its serotonin level increases which triggers behaviors of interactions with this object to calibrate its GEITH parameters. 
+Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the brain. 
+The cognitive architecture uses this grid as a small finite discrete POMDP in which to perform information seeking and optimization with an algorithm off the shelf. 
 
-We have discretized the phenomenon-centric model into a small hexagonal grid inspired by grid cells in the brain. 
-We use this discrete grid as a small POMDP on which to perform learning to reduce prediction error, drawing inspiration from the \texttt{inferactively-pymdp} library \cite{Heins2022}.
-The GEITH provides this POMDP with an observation of the phenomenon: the cell indicating the relative position of the robot and the outcome of interactions.
-%Once the agent has instantiated a phenomenon-centric model, it can use it to learn to reduce prediction error. 
-%This allows applying active inference in discrete state space as proposed by the \texttt{inferactively-pymdp} python library \cite{Heins2022}.
-
-  
-
-%Prediction errors may have a variety of causes sometimes difficult to untangle. 
-%Again, we are looking for core systems of causal explanation that may have evolved in the brain.
-%The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
-%Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
 
 
 \section{Experiment}
 \label{sec:expe}
 
 We designed a robotic platform called Petitcat\footnote{We personalize the robot by his name Petitcat and his pronoun. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters, and, we hope, facilitates the reading.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
-This experiment, uses only two sensors.
+The experiment reported here uses only two sensors.
 The ``floor luminosity sensor'' is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors we retrieve 4 possible states:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} indicating the possible presence and relative position of a black tape beneath them.  
 The IMU measures the yaw during the enaction of interactions.
-Note that Petitcat cannot ``see'' the tape from a distance. 
-What looks like eyes on his head is an echo-localization sensor not used in this experiment. 
+Note that Petitcat cannot see the tape from a distance. 
 He has no camera, lidar or odometer.
+What looks like eyes on his head is an ultrasonic echo-localization sensor not used in this experiment. 
 We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
 
 \begin{figure}
@@ -208,7 +199,9 @@ We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}).
 	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
 		Left: Petitcat playing with a point made of a piece of black tape on the floor.
 		Top right: Petitcat's egocentric memory. Black segments: black tape detection events. 
-		Bottom right: allocentric memory. Black hexagon: the point phenomenon used as a reference frame. Yellow hexagons: echo measured with the sonar. Red hexagon: focus of attention.} \label{fig:video}
+		Bottom right: phenomenon-centric memory. 
+		Black hexagon: the point phenomenon used as origin of the allocentric reference frame. 
+		Yellow hexagons: echo measured with the sonar. Red hexagon: focus of attention.} \label{fig:video}
 \end{figure}
 
 The C++ software running on the robot's Arduino board controls the enaction of primitive interactions. 
@@ -223,15 +216,15 @@ For this experiment, we defined four possible commands: \texttt{forward}, \textt
 \texttt{Turn} consists in turning in place. Its spatio-temporal attribute is the target yaw (float), negative when counter-trigonometric. 
 %they have been separated rather than using a direction attribute because they are conceptually different: moving toward or away from a target. 
 
-The control loop monitors the floor luminosity and the yaw. %, and the distance of echo signals during the enaction of interactions. 
-The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{tape} or \texttt{no\_tape}, which gives eight primitive interactions (4 commands $\times$ 2 outcomes).
-Primitive interactions are identified by their tuple $\langle$command, outcome$\rangle$.
+The control loop monitors the elapsed time, the yaw, and the floor luminosity. %, and the distance of echo signals during the enaction of interactions. 
+The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{no\_tape} or \texttt{tape}.
+This gives eight primitive interactions identified by their tuple $\langle$command, outcome$\rangle$ (4 commands $\times$ 2 outcomes).
 % Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
-All interactions are given a null prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
-Additionally, the robot returns the measured spatial attributes to the GEITH: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
+All interactions are given a zero prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
+Additionally, the robot returns the measured spatial attributes: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
 
-When the black tape is detected, a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
-When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape.
+When the black tape is detected, the movement is interrupted and a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
+When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape. This behavior was implemented to prevent the robot from falling off a table.
 
 We seeded the cognitive architecture with the four composite interactions below, which constitute ``innate'' manners for Petitcat to interact with points. 
 The GEITH tries to simulate them, computes their spatio-temporal attributes according to the position of the phenomenon in memory, and proposes those that are feasible in the current context.
@@ -263,27 +256,55 @@ The interactions with the point continue afterward based on focus in different c
 DA is reset to 50 if Petitcat finds the lost point, otherwise it progressively decreases until it drops below 50 causing Petitcat to abandon the search. 
 
 In addition to the number of failed interactions, we also expect the prediction errors of the yaw and of the forward duration to decrease as the GEITH adjusts its parameters. 
-Our GEITH has about 20 parameters but this experiment only involves \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
+Our GEITH has about 20 parameters but this experiment only involves \texttt{FLOOR\_SENSOR\_POSITION}, \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
 Note that the GEITH has no means to infer the absolute values of these parameters but can only adjust them in relation to one another.
 The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor which will cause a withdrawal with rotation. The GEITH can only make the robot aim strait at the point and thus always predicts straight withdrawal. 
 
-Ideally, we would like the GEITH to find by itself the relations of causality that link parameters to prediction errors, but in this experiment, we predefined these relations.
+%Ideally, we would like the GEITH to find by itself the relations of causality that link parameters to prediction errors, but in this experiment, we predefined these relations.
 
 
 \section{Results}
 
 Several videos of experiment runs are available online. 
 Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}.
+In this run, Petitcat encountered the point on Step 2 and interacted with it up to Step 60.
+On Step 17, it missed the point but found it again on Step 20.
+This is shown in the \textit{outcome code prediction error plot} in Fig. \ref{fig:outcome}. 
+The fact that Peticat did not miss the point after Step 20 shows an improvement of the GEITH parameters.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{01_Outcome_code.pdf}
-	\caption{Prediction error of point detection.
-	Step 2: the robot did not expect to detect the point.
-	Steps 17: the robot expected to detect the point while translating forward but missed it.
-	Steps 18: the robot expected to not detect the point while turning around but detected it.
-	Step 20: the robot did not predict detecting the point through simulation but it did. 
-	Step 65: The robot did not expect to detect the surrounding arena. } \label{fig:yaw_pe}
+	\caption{Outcome prediction error plot: 0 if predicted outcome = actual outcome (successful interaction), 1 otherwise (failed interaction).
+	Step 2: Petitcat did not expect to detect the point.
+	Steps 17: he expected to detect the point while translating forward but missed it.
+	Steps 18: he expected to not detect the point while turning but detected it.
+	Step 20: he did not predict detecting the point but did. 
+	Step 63: As he moved away from the point, he did not expect to detect the surrounding arena. } \label{fig:outcome}
 \end{figure}
+
+As explained above, the GEITH cannot predict when Peticat will detect the point on the side. 
+This can cause great yaw prediction error because the robot unexpectedly turned during withdrawal.
+Fig. \ref{fig:yaw_pe} show these prediction errors that do not improve over time. 
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
+	\caption{Yaw prediction error plot showing no significant improvement of yaw prediction error.
+		Points above 20 or below -20 are great prediction errors occurring when Petitcat turned while withdrawing because the GEITH does not prediction detecting the point on the side.
+	%	Step 2: Petitcat detected the point on the side which caused an unpredicted yaw to the left.   shows no improvement when we do not distinguish between the different kinds of interactions.
+	} \label{fig:yaw_pe}
+\end{figure}
+
+%The GEITH can predict side detection of lines and simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}. 
+The GEITH simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameters.
+To adjust this parameter, the robot must isolate the interactions in which he detected the point on the side and compute the \textit{yaw residual error}. 
+The yaw residual error is the residual prediction error that is left when the robot knows on which side the point was detected. 
+Fig. \ref{fig:yaw_re} shows that it reduces as the robot adjusts the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameters.
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
+	\caption{The yaw residual error during interactions in which the robot detects the point decreases significantly after Step 26.} \label{fig:yaw_re}
+\end{figure}
+
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{07_Forward_duration_pe.pdf}
@@ -294,17 +315,6 @@ Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}
 	Step 65: the forward translation was unexpectedly interrupted by the detection of the arena border.} \label{fig:yaw_re}
 \end{figure}
 
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
-	\caption{The yaw prediction error shows no significant trend when we do not distinguish between the different kinds of interactions.} \label{fig:yaw_pe}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
-	\caption{The yaw residual error during interactions in which the robot detects the point decreases significantly after Step 26.} \label{fig:yaw_re}
-\end{figure}
-
 %\begin{figure}
 %	\includegraphics[width=\textwidth]{04_Compass.pdf}
 %	\caption{The compass residual error decreases after step 20 when the robot starts circling around the point.
@@ -313,6 +323,18 @@ Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}
 %\end{figure}
 
 \section{Conclusion}
+
+
+We uses phenomenon-centric memory as a small POMDP on which to perform learning to reduce prediction error, drawing inspiration from the \texttt{inferactively-pymdp} library \cite{Heins2022}.
+The GEITH provides this POMDP with an observation of the phenomenon: the cell indicating the relative position of the robot and the outcome of interactions.
+Once the agent has instantiated a phenomenon-centric model, it can use it to learn to reduce prediction error. 
+This allows applying active inference in discrete state space as proposed by the \texttt{inferactively-pymdp} python library \cite{Heins2022}.
+
+
+Prediction errors may have a variety of causes sometimes difficult to untangle. 
+Again, we are looking for core systems of causal explanation that may have evolved in the brain.
+The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
+Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
 
 We are not claiming the robot can actually \textit{experience} emotions let alone have sentience. 
 His internal model of emotions, nonetheless, helps generate behaviors that human observers easily interpret as lifelike. 
