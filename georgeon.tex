@@ -221,18 +221,18 @@ The termination conditions are reaching the target duration or yaw, or detecting
 This gives eight primitive interactions identified by their tuple $\langle$command, outcome$\rangle$ (4 commands $\times$ 2 outcomes).
 % Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
 All interactions are given a zero prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
-Additionally, the robot returns the measured spatial attributes: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
+Additionally, the robot returns the measured spatio-temporal attributes: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
 
 When the black tape is detected, the movement is interrupted and a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
-When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape. This behavior was implemented to prevent the robot from falling off a table.
+When the detection is on the side, this withdrawal includes a rotation to the opposite side, which tends to bring the robot back into a position perpendicular to the tape. This behavior was implemented to prevent the robot from falling off a table or exiting the arena.
 
 We seeded the cognitive architecture with the four composite interactions below, which constitute ``innate'' manners for Petitcat to interact with points. 
 The GEITH tries to simulate them, computes their spatio-temporal attributes according to the position of the phenomenon in memory, and proposes those that are feasible in the current context.
 \begin{enumerate}
 	\item $\langle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$. 
+	\item $\langle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
+	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
+	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$. 
 \end{enumerate}
 
 The levels of the neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
@@ -279,40 +279,45 @@ The fact that Peticat did not miss the point after Step 20 shows an improvement 
 	Steps 17: he expected to detect the point while translating forward but missed it.
 	Steps 18: he expected to not detect the point while turning but detected it.
 	Step 20: he did not predict detecting the point but did. 
-	Step 63: As he moved away from the point, he did not expect to detect the surrounding arena. } \label{fig:outcome}
+	Step 63: As he moved away from the point, he did not expect to detect the arena border. } \label{fig:outcome}
 \end{figure}
 
 As explained above, the GEITH cannot predict when Peticat will detect the point on the side. 
-This can cause great yaw prediction error because the robot unexpectedly turned during withdrawal.
-Fig. \ref{fig:yaw_pe} show these prediction errors that do not improve over time. 
+This can cause large yaw prediction error because the robot unexpectedly turned during withdrawal.
+Fig. \ref{fig:yaw_pe} shows these prediction errors that do not improve over time. 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
 	\caption{Yaw prediction error plot showing no significant improvement of yaw prediction error.
-		Points above 20 or below -20 are great prediction errors occurring when Petitcat turned while withdrawing because the GEITH does not prediction detecting the point on the side.
+		Points above 20 or below -20 are large prediction errors occurring when Petitcat turned while withdrawing because the GEITH does not prediction detecting the point on the side.
 	%	Step 2: Petitcat detected the point on the side which caused an unpredicted yaw to the left.   shows no improvement when we do not distinguish between the different kinds of interactions.
 	} \label{fig:yaw_pe}
 \end{figure}
 
-%The GEITH can predict side detection of lines and simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}. 
 The GEITH simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameters.
-To adjust this parameter, the robot must isolate the interactions in which he detected the point on the side and compute the \textit{yaw residual error}. 
-The yaw residual error is the residual prediction error that is left when the robot knows on which side the point was detected. 
-Fig. \ref{fig:yaw_re} shows that it reduces as the robot adjusts the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameters.
+To adjust this parameter, the GEITH must 
+%isolate the interactions in which he detected the point on the side and 
+compute the \textit{yaw residual error} 
+%The yaw residual error is the residual prediction error 
+that is left when knowing on which side the point was detected. 
+Fig. \ref{fig:yaw_re} shows that the yaw residual error decreases as the robot adjusts the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameter.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
-	\caption{The yaw residual error during interactions in which the robot detects the point decreases significantly after Step 26.} \label{fig:yaw_re}
+	\caption{Yaw residual error plot showing a significant decrease as the robot interact with the point.
+	} \label{fig:yaw_re}
 \end{figure}
 
+The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} allows for a visible decrease of the forward duration prediction error shown in Fig. \ref{fig:forward_re}.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{07_Forward_duration_pe.pdf}
-	\caption{Forward duration prediction error.
+	\caption{Duration prediction error for \texttt{forward} interactions.
 	Step 2 and 20: the forward translation was unexpectedly interrupted by the point detection.
 	Step 17: the forward duration was longer than expected because the robot did not detect the point.
-	From Step 21 to 64: forward duration prediction error slightly decreases. 
-	Step 65: the forward translation was unexpectedly interrupted by the detection of the arena border.} \label{fig:yaw_re}
+	Except for these events, the plot shows that the forward duration prediction error decreases.
+	From Step 63: Forward duration prediction errors occur as Petitcat discovers the arena border.
+	} \label{fig:forward_re}
 \end{figure}
 
 %\begin{figure}
