@@ -62,8 +62,9 @@ It is widely believed that cognitive beings possess some kind of a \textit{world
 How they construct, maintain, and use this world model remains, however,  an open question in cognitive science and artificial intelligence. 
 
 The Partially Observable Markov Decision Process (POMDP) literature has proposed a broad range of methods to infer a \textit{belief state} in a partially observable process.
-The belief state amounts to the agent's world model of the environment that the agent can only partially observe.  
-If the state transition function and the observation function are known \textit{a priori}, the problem of computing the belief state has been mathematically solved, but proved to be generally intractable (NP-Hard) \cite{astrom1965optimal}. 
+%The belief state amounts to the agent's world model of the environment that the agent can only partially observe.  
+The agent uses the belief state as a model of the environment that the agent observes through partial observations.  
+If the agent knows the POMDP's state-transition function and the observation function \textit{a priori}, the problem of computing the belief state has been mathematically solved, but proved to be generally intractable (NP-Hard) \cite{astrom1965optimal}. 
 % It was, however, also proven that the implementation of the solution becomes intractable as the set of states and observation grows. 
 %Without knowledge of the state transition and observation functions, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
 
@@ -76,18 +77,19 @@ In essence, at each instant, the agent estimates which states are the most or le
 %This method iteratively updates $\mu_t$ on each interaction cycle.
 %The agent selects the action that is expected to maximize the information gained to refine the probability distribution. 
 %The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
-Active inference has been used in robotics \cite{lanillos_active_2021} but significant challenges remain when the robot is expected to explore an open world. 
-Most of active inference mathematical apparatus requires that the set of possible world states 
-%and the relation from states to observations 
-be known \textit{a priori}---an assumption that we avoid in the present study. %$S$ 
+Active inference has been used in robotics \cite{lanillos_active_2021} but generally under \textit{closed-world} settings in the sense that the set of possible states is known \textit{a priori}---a requirement for most the active inference mathematical apparatus. 
+%Significant challenges remain when the robot is placed in an open world. 
+%and the relation from states to observations be known \textit{a priori}.
+%---an assumption that we avoid in the present study. %$S$ 
 %Moreover, computing the free energy remains too computationally intensive for our robotics experiment.
 %remain; however to  and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
 
-The POMDP and active inference literature led us to hypothesize that inferring the world model through experience of interaction requires prior assumptions to reduce complexity \cite{georgeon_artificial_2024}. 
-The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to reduce its prediction errors. 
+When the robot is thrown in an open world, 
+the POMDP and active inference literature suggest that it needs prior assumptions about the world to cope with complexity \cite{georgeon_artificial_2024}. 
+The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain an open world model and reduce prediction errors. 
 
 Joshua Tenenbaum and his research group have proposed the GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate basic dynamics of physics and interactions. 
-The GEITH would rest upon brain structures that are partially predefined by genes and then completed through ontogenetic development.  
+In the brain, the GEITH rests upon structures that are partially predefined by genes and then completed through ontogenetic development.  
 Similarly, it is possible to endow artificial agents and robots with a predefined software game engine, and expect them to refine the parameters of their game engine as they test their predictions in the world.
 
 This paper proposes an approach to designing autonomous agent that can refine their GEITH through their lifetime.
@@ -155,7 +157,7 @@ The cognitive architecture uses variables that represent the robot's \textit{emo
 		Red hexagon: the focus of attention localized at the position of the phenomenon. 
 		Magenta hexagon: the prompt is the localization of the next selected interaction's destination: \texttt{swipe} to the right.
 		Left: the types of phenomena inferred trough interactive experience.
-		Solid objects, walls, and other robots are detected by the echo-localization sensor but not used in this experiment.
+		Solid objects, walls, and other robots can be detected by the echo-localization sensor but are not present in this experiment.
 		Top center: predefined composite interactions and GEITH parameters.
 		Top right: three-dimensional emotional state based on dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA).
 		Right: the decider selects the next behavior based on the emotional state and the expected outcome predicted by the GEITH.} \label{fig:geith}
@@ -184,7 +186,7 @@ The cognitive architecture uses this grid as a small finite discrete POMDP in wh
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{We personalize the robot by his name Petitcat and his pronoun. We do not claim that he has a psychology, let alone a gender, but this way if speaking feels more natural to human experimenters, and, we hope, facilitates the reading.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+We designed a robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
 The experiment reported here uses only two sensors.
 The ``floor luminosity sensor'' is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors we retrieve 4 possible states:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} indicating the possible presence and relative position of a black tape beneath them.  
@@ -244,16 +246,16 @@ When 5-HT drops below or equal to DA, the  $\langle$\texttt{forward}, \texttt{no
 
 Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
 Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
-Failing primitive interactions cause the composite interaction to which they belong to abort, and the DA level to increase to its max.
+Failing primitive interactions cause the composite interaction to which they belong to abort, and the NA level to increase to its max.
 
 The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point to compute the spatio-temporal attributes of interactions (Fig. \ref{fig:geith}, center). 
 When Petitcat interacts with a point, the GEITH places the focus of attention at the place of the phenomenon. 
 A failure to interact with the point means that the localization of the phenomenon in memory is erroneous. 
 %generally due to drift caused by inaccuracy in the GEITH parameters and the spatio-temporal measures. 
-The high DA level that occurs in case of failure causes the GEITH to move the focus of attention to another cell in phenomenon-centric memory in search for the point.
+The high NA level that occurs in case of failure causes the GEITH to move the focus of attention to another cell in phenomenon-centric memory in search for the point.
 Cells compete to catch the focus with preference given to those closer to the last detected position of the phenomenon but having gone the longest period since last being visited.
 The interactions with the point continue afterward based on focus in different cells. 
-DA is reset to 50 if Petitcat finds the lost point, otherwise it progressively decreases until it drops below 50 causing Petitcat to abandon the search. 
+NA is reset to 50 if Petitcat finds the lost point, otherwise it progressively decreases until it drops below 50 causing Petitcat to abandon the search. 
 
 In addition to the number of failed interactions, we also expect the prediction errors of the yaw and of the forward duration to decrease as the GEITH adjusts its parameters. 
 Our GEITH has about 20 parameters but this experiment only involves \texttt{FLOOR\_SENSOR\_POSITION}, \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
@@ -264,6 +266,7 @@ The GEITH cannot either predict that the point will be detected on the side of t
 
 
 \section{Results}
+\label{sec:results}
 
 Several videos of experiment runs are available online. 
 Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}.
@@ -283,12 +286,12 @@ The fact that Peticat did not miss the point after Step 20 shows an improvement 
 \end{figure}
 
 As explained above, the GEITH cannot predict when Peticat will detect the point on the side. 
-This can cause large yaw prediction error because the robot unexpectedly turned during withdrawal.
+This can cause large yaw prediction errors because the robot unexpectedly turned during withdrawal.
 Fig. \ref{fig:yaw_pe} shows these prediction errors that do not improve over time. 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
-	\caption{Yaw prediction error plot showing no significant improvement of yaw prediction error.
+	\caption{Yaw prediction error plot. The prediction errors come from different causes which makes the interpretation of the plot difficult. 
 		Points above 20 or below -20 are large prediction errors occurring when Petitcat turned while withdrawing because the GEITH does not prediction detecting the point on the side.
 	%	Step 2: Petitcat detected the point on the side which caused an unpredicted yaw to the left.   shows no improvement when we do not distinguish between the different kinds of interactions.
 	} \label{fig:yaw_pe}
@@ -304,7 +307,8 @@ Fig. \ref{fig:yaw_re} shows that the yaw residual error decreases as the robot a
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
-	\caption{Yaw residual error plot showing a significant decrease as the robot interact with the point.
+	\caption{Yaw residual error of interactions that have a \texttt{tape} outcome. 
+		It shows a significant decrease as the robot interacts with the point.
 	} \label{fig:yaw_re}
 \end{figure}
 
@@ -329,21 +333,37 @@ The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} al
 
 \section{Conclusion}
 
+We demonstrated a simple robot that managed to reduce intuitive-physics prediction errors in an open environment. 
+We drew inspiration from theories positing core knowledge in the brain that have innate origins.
+The robot's design rests upon the cognitive architecture, the game engine, the model of emotions, and an innate set of behaviors.
+These elements are hard-coded in the robot but what is not predefined is the set of world states and the ontology of objects in the world.
 
-We uses phenomenon-centric memory as a small POMDP on which to perform learning to reduce prediction error, drawing inspiration from the \texttt{inferactively-pymdp} library \cite{Heins2022}.
-The GEITH provides this POMDP with an observation of the phenomenon: the cell indicating the relative position of the robot and the outcome of interactions.
-Once the agent has instantiated a phenomenon-centric model, it can use it to learn to reduce prediction error. 
-This allows applying active inference in discrete state space as proposed by the \texttt{inferactively-pymdp} python library \cite{Heins2022}.
+When the robot finds an object, it instantiates a small local model in the reference frame of this object. 
+This finite discrete model lends itself to regular active inference techniques. 
+We continue studying how to optimize the process of GEITH refinement in such local models using the active inference python library  \texttt{inferac\-tively-pymdp} \cite{Heins2022}.
 
 
-Prediction errors may have a variety of causes sometimes difficult to untangle. 
-Again, we are looking for core systems of causal explanation that may have evolved in the brain.
-The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
-Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
+This study merely begins to explore the intricacies involved in autonomously refining the world model.
+We expect the next step to involve endowing the robot with the capacity to represent lines between points which could open the way to learning compositionality of phenomena. 
+Next we shall examine how the robot can deal with persistence, disappearance, or displacement of objects. 
 
 We are not claiming the robot can actually \textit{experience} emotions let alone have sentience. 
-His internal model of emotions, nonetheless, helps generate behaviors that human observers easily interpret as lifelike. 
-The emotional indicator facilitates this interpretation. 
+Our approach, nonetheless, helps generate behaviors that human observers easily interpret as lifelike, which could find applications in companion robotics.
+The robot seems to enjoy exploring for the mere pleasure of movement as it lights up in green (DA prevails); 
+it plays with the point as for developing its skills as it lights up in white (5-HT prevails); 
+it seems anxious to find the lost point as it lights up in red (NA prevails). 
+We wish to further study to what extent observers attribute these subjective traits in future experiments.
+%It wish to further investigate how human observers project these interpretations in a controlled experiment. 
+
+
+
+%Prediction errors may have a variety of causes sometimes difficult to untangle. 
+%Again, we are looking for core systems of causal explanation that may have evolved in the brain.
+%The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
+%Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
+
+
+
 
 \begin{credits}
 
