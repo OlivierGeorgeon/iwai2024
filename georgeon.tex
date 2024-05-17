@@ -19,6 +19,11 @@
 %\renewcommand\UrlFont{\color{blue}\rmfamily}
 %\urlstyle{rm}
 %
+
+% Added by olivier
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+
 \begin{document}
 %
 \title{Reducing Intuitive-Physics Prediction Error through Playing}
@@ -44,10 +49,12 @@ DOLL Labs, Lexington, MA, USA\\
 %
 \begin{abstract}
 We present an autonomous robot that generates behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
+Most POMDP and Active Inference learning techniques operate in a closed world in which the set of states is defined a priori. 
+Implementing an ``innate'' GEITH and set of interactive behaviors, however, allowed us to avoid these limitations and design a mechanism for information seeking and learning in an open world. 
 %The robot selects behaviors that yield information to refine the GEITH parameters. 
-At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
-For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
-Results show that over a few tens of interaction cycles, the robot improves its GEITH calibration and decreases its prediction errors. 
+%At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
+%For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
+Results show that over a few tens of interaction cycles, the robot's prediction errors decrease which shows an improvement in the GEITH calibration. 
 Moreover, the robot generates behaviors that human observers describe as playful.
 
 \keywords{Active infernce  \and constructivist learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
@@ -93,10 +100,11 @@ In the brain, the GEITH rests upon structures that are partially predefined by g
 Similarly, it is possible to endow artificial agents and robots with a predefined software game engine, and expect them to refine the parameters of their game engine as they test their predictions in the world.
 
 This paper proposes an approach to designing autonomous agent that can refine their GEITH through their lifetime.
-The refinement of the game engine is measured through two methods. 
-The first is performed by the robot itself by measuring the prediction error of sensory signals. 
+The refinement of the game engine is assessed through 
+% two methods. The first is performed by the robot itself by measuring 
+the prediction error of sensory signals. 
 Decrease in prediction errors shows improvement of the game engine. 
-The second is performed by the experimenter by assessing whether the game engine parameters converge towards a target range that indicates that the robot managed to calibrate its GEITH. 
+%The second is performed by the experimenter by assessing whether the game engine parameters converge towards a target range that indicates that the robot managed to calibrate its GEITH. 
 
 
 
@@ -119,7 +127,8 @@ For a deeper examination of these principles in relation with the active inferen
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
 %Indeed, to survive, cognitive beings should avoid bad predictions as much as they can. %generally stay away from bad surprises.
-As introduced in Section \ref{sec:intro}, however, we are not using gradient descent of prediction error (or surprise) as a motivational principle to drive the learning process. 
+%As introduced in Section \ref{sec:intro}, 
+We, however, are not using gradient descent of prediction error (or surprise) as a motivational principle to drive the learning process. 
 As we will develop, our agent is not always driven by a value optimization process; it may sometimes enact disinterested behaviors.
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
 For us, prediction-error reduction is not a means to improve the world model but a consequence of its improvement.
@@ -179,7 +188,7 @@ Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according 
 
 Once the robot has selected an object in the environment, its serotonin level increases which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
 Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the brain. 
-The cognitive architecture uses this grid as a small finite discrete POMDP in which to perform information seeking and optimization. % with an algorithm off the shelf. 
+The cognitive architecture uses this grid as a small finite discrete model in which to perform information seeking and optimization. % with an algorithm off the shelf. 
 
 
 
@@ -188,12 +197,12 @@ The cognitive architecture uses this grid as a small finite discrete POMDP in wh
 
 We designed a robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
 The experiment reported here uses only two sensors.
-The ``floor luminosity sensor'' is a bar of 5 infrared-reflective sensors directed to the floor.
+The \textit{floor luminosity sensor} is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors we retrieve 4 possible states:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} indicating the possible presence and relative position of a black tape beneath them.  
 The IMU measures the yaw during the enaction of interactions.
 Note that Petitcat cannot see the tape from a distance. 
 He has no camera, lidar or odometer.
-What looks like eyes on his head is an ultrasonic echo-localization sensor not used in this experiment. 
+What looks like eyes on his head is an ultrasonic echo-localization sensor not exploited in this experiment. 
 We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
 
 \begin{figure}
@@ -220,7 +229,7 @@ For this experiment, we defined four possible commands: \texttt{forward}, \textt
 
 The control loop monitors the elapsed time, the yaw, and the floor luminosity. %, and the distance of echo signals during the enaction of interactions. 
 The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{no\_tape} or \texttt{tape}.
-This gives eight primitive interactions identified by their tuple $\langle$command, outcome$\rangle$ (4 commands $\times$ 2 outcomes).
+This gives eight primitive interactions identified by their tuple $\langle$command, outcome$\rangle$: 4 commands $\times$ 2 outcomes.
 % Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
 All interactions are given a zero prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
 Additionally, the robot returns the measured spatio-temporal attributes: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
@@ -270,7 +279,7 @@ The GEITH thus always predicts straight withdrawal.
 \section{Results}
 \label{sec:results}
 
-Several videos of experiment runs are available online. 
+Several videos of experiment runs are available online \cite{georgeon_petitcat_playlist}. 
 Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}.
 In this run, Petitcat encountered the point on Step 2 and interacted with it up to Step 60.
 On Step 17, it missed the point but found it again on Step 20.
@@ -294,12 +303,12 @@ Fig. \ref{fig:yaw_pe} shows these prediction errors that do not improve over tim
 \begin{figure}
 	\includegraphics[width=\textwidth]{02_yaw_pe.pdf}
 	\caption{Yaw prediction error plot. The prediction errors come from different causes which makes the interpretation of the plot difficult. 
-		Points above 20 or below -20 are large prediction errors occurring when Petitcat turned while withdrawing because the GEITH does not prediction detecting the point on the side.
+		Points above 20 or below -20 are large prediction errors occurring when Petitcat turned while withdrawing because the GEITH did not predict detecting the point on the side.
 	%	Step 2: Petitcat detected the point on the side which caused an unpredicted yaw to the left.   shows no improvement when we do not distinguish between the different kinds of interactions.
 	} \label{fig:yaw_pe}
 \end{figure}
 
-The GEITH simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameters.
+The GEITH simulates turning while withdrawing based on the \texttt{SIDE\_WITH\-DRA\-WAL\_YAW} parameter.
 To adjust this parameter, the GEITH must 
 %isolate the interactions in which he detected the point on the side and 
 compute the \textit{yaw residual error} 
@@ -355,7 +364,7 @@ The robot, nonetheless, generates behaviors that human observers easily interpre
 The robot seems to enjoy exploring for the mere pleasure of movement as it lights up in green (DA prevails); 
 it plays with the point as for practicing its skills as it lights up in white (5-HT prevails); 
 it seems anxious to search the lost point as it lights up in red (NA prevails). 
-In future experiments, we wish to study more precisely to what extent observers attribute these subjective traits to the robot.
+In future experiments, we wish to study more precisely to what extent observers assign these subjective traits to the robot.
 %It wish to further investigate how human observers project these interpretations in a controlled experiment. 
 
 
