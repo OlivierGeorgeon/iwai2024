@@ -66,7 +66,7 @@ Moreover, the robot generates behaviors that human observers describe as playful
 \label{sec:intro}
 
 It is widely believed that cognitive beings possess some kind of actionable \textit{world model} that they use to generate intelligent behaviors.
-The development of this world model may begin during the first stages of development with the learning of basic physical interactions---a process called ``development of sensorimotor structures'' by psychologists like Piaget \cite[p. 104]{dolle_pour_2005}. 
+The development of this world model may begin during the first stages of life with the learning of basic physical interactions---a process called ``development of sensorimotor structures'' by psychologists like Piaget \cite[p. 104]{dolle_pour_2005}. 
 %Developmental psychologist like Piaget have argued that the first stages of child development involved the ``development of sensorimotor structures'' acquired through interactive experience  \cite[p. 104]{dolle_pour_2005}. 
 %Kevin O'Regan called this process the learning of the ``mastery of sensorimotor contingencies'' \cite{oregan_sensorimotor_2001}. 
 Transferring these ideas into artificial intelligence and robotics, however,  remains an open challenge.
@@ -102,7 +102,7 @@ Active inference has been used in robotics \cite{lanillos_active_2021} but gener
 
 When the robot is thrown in an open world, 
 the POMDP and active inference literature suggest that it needs prior assumptions about the world to cope with complexity \cite{georgeon_artificial_2024}. 
-The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain an open world model and reduce prediction errors. 
+The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain an open-world model and reduce prediction errors. 
 
 Joshua Tenenbaum and his research group have proposed the GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate basic dynamics of physics and interactions. 
 In the brain, the GEITH rests upon structures that are partially predefined by genes and then completed through ontogenetic development.  
@@ -137,8 +137,8 @@ For a deeper examination of these principles in relation with the active inferen
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
 %Indeed, to survive, cognitive beings should avoid bad predictions as much as they can. %generally stay away from bad surprises.
 %As introduced in Section \ref{sec:intro}, 
-We, however, are not using gradient descent of prediction error (or surprise) as a motivational principle to drive the learning process. 
-As we will develop, our agent is not always driven by a value optimization process; it may sometimes enact disinterested behaviors.
+We, however, are not using gradient descent of prediction error as a motivational principle to drive the learning process. 
+As we will develop, our agent is not always driven by a value optimization process; it may also enact disinterested behaviors.
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
 For us, prediction-error reduction is not a means to improve the world model but a consequence of its improvement.
 
@@ -162,8 +162,9 @@ In this case, the GEITH instantiates a data structure called a \textit{phenomeno
 Next, the GEITH simulates subsequent interactions with phenomena to predict future outcomes. 
 The present study focuses on the simplest possible kind of phenomenon: points on the two-dimensional floor.
 
-We seeded the cognitive architecture with ``innate'' composite interactions (Fig. \ref{fig:geith}, top-center) that cause the robot to explore the environment and to interact with points encountered on the floor. 
-Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
+We seeded the cognitive architecture with ``innate'' composite interactions that cause the robot to explore the environment and to interact with points encountered on the floor (Fig. \ref{fig:geith}, top-center). 
+In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters to reduce prediction error.
+%Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
 The cognitive architecture uses variables that represent the robot's \textit{emotional state} to selects composite interactions to try to enact.
 
 \begin{figure}
@@ -225,7 +226,7 @@ We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}).
 \end{figure}
 
 The C++ software running on the robot's Arduino board controls the enaction of primitive interactions. 
-A personal computer implements the GEITH and the cognitive architecture that remote controls the robot through wifi.
+A personal computer implements the GEITH and the cognitive architecture that remote controls the robot through Wi-Fi.
 The cognitive architecture selects the primitive interaction to try to enact and sends it to the robot. 
 The robot tries to enact it and sends the outcome back to the PC.  
 The code is open source and shared online \cite{petitcat_github}.
