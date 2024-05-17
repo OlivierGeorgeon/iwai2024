@@ -166,7 +166,7 @@ The cognitive architecture uses variables that represent the robot's \textit{emo
 We use Hugo Lövheim's ``cube of emotions'' \cite{lovheim_new_2012} as a basic emotional model based on three neurotransmitters: dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) (Fig. \ref{fig:geith}, top right).
 This model associates dopamine with pleasure and reward-seeking behavior, serotonin with well-being and playful behavior, and nor-adrenaline with arousal and stress responses.
 It has been successfully used for simple emotional robotics.
-Our robot visually indicates its predominant neurotransmitter level using an intuitive color code developed by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
+Our robot visually indicates its predominant neurotransmitter level using an intuitive color code studied by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
 The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
 The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
@@ -177,9 +177,9 @@ This mechanism of coordinate conversion relates to that implemented by Howard Sc
 Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according to which the brain records thousands of small spatial models to memorize interactions with different kinds of objects.
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
-Once the robot has selected an object in the environment, its serotonin level increases which triggers behaviors of interactions with this object to calibrate its GEITH parameters. 
+Once the robot has selected an object in the environment, its serotonin level increases which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
 Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the brain. 
-The cognitive architecture uses this grid as a small finite discrete POMDP in which to perform information seeking and optimization with an algorithm off the shelf. 
+The cognitive architecture uses this grid as a small finite discrete POMDP in which to perform information seeking and optimization. % with an algorithm off the shelf. 
 
 
 
@@ -239,14 +239,14 @@ The GEITH tries to simulate them, computes their spatio-temporal attributes acco
 
 The levels of the neurotransmitters can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
 Prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive prior preference.
-When he detects a point (by surprise), 5-HT increases to its max. 
+When he detects a point (by surprise), 5-HT rises to its max. 
 Prevalence of 5-HT and the presence of a point phenomenon in memory triggers the selection of the innate interactions with the point.
 If the prediction errors do not decrease (i.e., prediction does not improve), 5-HT decreases.
 When 5-HT drops below or equal to DA, the  $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction is again selected causing Petitcat to go explore new destinations. 
 
 Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
 Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
-Failing primitive interactions cause the composite interaction to which they belong to abort, and the NA level to increase to its max.
+Failing primitive interactions cause the composite interaction to which they belong to abort, and NA to rise to its max.
 
 The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point to compute the spatio-temporal attributes of interactions (Fig. \ref{fig:geith}, center). 
 When Petitcat interacts with a point, the GEITH places the focus of attention at the place of the phenomenon. 
@@ -260,7 +260,9 @@ NA is reset to 50 if Petitcat finds the lost point, otherwise it progressively d
 In addition to the number of failed interactions, we also expect the prediction errors of the yaw and of the forward duration to decrease as the GEITH adjusts its parameters. 
 Our GEITH has about 20 parameters but this experiment only involves \texttt{FLOOR\_SENSOR\_POSITION}, \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
 Note that the GEITH has no means to infer the absolute values of these parameters but can only adjust them in relation to one another.
-The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor which will cause a withdrawal with rotation. The GEITH can only make the robot aim strait at the point and thus always predicts straight withdrawal. 
+The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor which will cause a withdrawal with rotation. 
+The cognitive architecture makes the robot aim strait at the point.
+The GEITH thus always predicts straight withdrawal. 
 
 %Ideally, we would like the GEITH to find by itself the relations of causality that link parameters to prediction errors, but in this experiment, we predefined these relations.
 
@@ -335,32 +337,27 @@ The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} al
 
 We demonstrated a simple robot that managed to reduce intuitive-physics prediction errors in an open environment. 
 We drew inspiration from theories positing core knowledge in the brain that have innate origins.
-The robot's design rests upon the cognitive architecture, the game engine, the model of emotions, and an innate set of behaviors.
+The robot's design rests upon the cognitive architecture, the game engine, the model of emotions, and a set of innate behaviors.
 These elements are hard-coded in the robot but what is not predefined is the set of world states and the ontology of objects in the world.
 
 When the robot finds an object, it instantiates a small local model in the reference frame of this object. 
 This finite discrete model lends itself to regular active inference techniques. 
 We continue studying how to optimize the process of GEITH refinement in such local models using the active inference python library  \texttt{inferac\-tively-pymdp} \cite{Heins2022}.
-
+This approach, however, remains dependent on the causal structure of the GEITH itself.
+How the agent could improve the causal structure of the GEITH or find exceptions remains an open question related to explainable AI \cite{thorisson_explanation_2021}.
 
 This study merely begins to explore the intricacies involved in autonomously refining the world model.
 We expect the next step to involve endowing the robot with the capacity to represent lines between points which could open the way to learning compositionality of phenomena. 
-Next we shall examine how the robot can deal with persistence, disappearance, or displacement of objects. 
+We shall also examine how the robot can deal with limited persistence, disappearance, or displacement of objects. 
 
 We are not claiming the robot can actually \textit{experience} emotions let alone have sentience. 
-Our approach, nonetheless, helps generate behaviors that human observers easily interpret as lifelike, which could find applications in companion robotics.
+The robot, nonetheless, generates behaviors that human observers easily interpret as lifelike, which could find applications in companion robotics.
 The robot seems to enjoy exploring for the mere pleasure of movement as it lights up in green (DA prevails); 
-it plays with the point as for developing its skills as it lights up in white (5-HT prevails); 
-it seems anxious to find the lost point as it lights up in red (NA prevails). 
-We wish to further study to what extent observers attribute these subjective traits in future experiments.
+it plays with the point as for practicing its skills as it lights up in white (5-HT prevails); 
+it seems anxious to search the lost point as it lights up in red (NA prevails). 
+In future experiments, we wish to study more precisely to what extent observers attribute these subjective traits to the robot.
 %It wish to further investigate how human observers project these interpretations in a controlled experiment. 
 
-
-
-%Prediction errors may have a variety of causes sometimes difficult to untangle. 
-%Again, we are looking for core systems of causal explanation that may have evolved in the brain.
-%The literature has pointed out that explanation requires isolating relevant elements of context, and tracking their transformation through series of events \cite{thorisson_explanation_2021}. 
-%Explanation may also involve a confrontation between proponent and opponent arguments, and further interactions with the world to weigh these arguments. 
 
 
 
