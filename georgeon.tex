@@ -195,15 +195,14 @@ Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according 
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
 Once the robot has selected an object in the environment, its serotonin level increases, which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
-Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the brain. 
+Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the hippocampus. 
 The cognitive architecture uses this grid as a small finite discrete model in which to perform information seeking and optimization. % with an algorithm off the shelf. 
-
 
 
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the ``robot car'' commercialized by Osoyoo \cite{osoyoo_robot_car}.
+We designed a robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the \textit{Osoyoo robot car} \cite{osoyoo_robot_car}.
 The experiment reported here uses only two sensors.
 The \textit{floor luminosity sensor} is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors we retrieve 4 possible signals:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} signaling the absence or relative position of a black tape present beneath them.  
@@ -211,7 +210,7 @@ The IMU measures the yaw during the enaction of interactions.
 Note that Petitcat cannot see the tape from a distance. 
 He has no camera, lidar, or odometer.
 What looks like eyes on his head is an ultrasonic echo-localization sensor not exploited in this experiment. 
-We added an RGB LED as the emotion indicator (Fig. \ref{fig:video}). 
+The emotion indicator in an RGB LED (Fig. \ref{fig:video}). 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
