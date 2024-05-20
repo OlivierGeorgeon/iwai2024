@@ -48,7 +48,7 @@ DOLL Labs, Lexington, MA, USA\\
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-We present an autonomous robot that generates behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
+We present a mobile robot that autonomously generates behaviors to calibrate its intuitive-physics engine also known as the ``Game Engine in the Head'' (GEITH).
 Most POMDP and Active Inference learning techniques operate in a closed world in which the set of states is defined a priori. 
 Implementing an ``innate'' GEITH and set of interactive behaviors, however, allowed us to avoid these limitations and design a mechanism for information seeking and learning in an open world. 
 %The robot selects behaviors that yield information to refine the GEITH parameters. 
@@ -195,14 +195,14 @@ Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019} according 
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
 Once the robot has selected an object in the environment, its serotonin level increases, which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
-Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the hippocampus. 
+Phenomenon-centric memory is discretized into an hexagonal grid inspired by grid cells in the entorhinal cortex \cite{moser_place_2008}. 
 The cognitive architecture uses this grid as a small finite discrete model in which to perform information seeking and optimization. % with an algorithm off the shelf. 
 
 
 \section{Experiment}
 \label{sec:expe}
 
-We designed a robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the \textit{Osoyoo robot car} \cite{osoyoo_robot_car}.
+We designed a mobile robotic platform called Petitcat\footnote{Sections \ref{sec:expe} and \ref{sec:results} personalize the robot by name and pronoun to enhance readability. We do not claim that he has a psychology or gender.} based on the \textit{Osoyoo robot car} \cite{osoyoo_robot_car}.
 The experiment reported here uses only two sensors.
 The \textit{floor luminosity sensor} is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors we retrieve 4 possible signals:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} signaling the absence or relative position of a black tape present beneath them.  
