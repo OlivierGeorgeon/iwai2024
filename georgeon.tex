@@ -80,9 +80,12 @@ Transferring these ideas into artificial intelligence and robotics, however,  re
 The Partially Observable Markov Decision Process (POMDP) literature has proposed a broad range of methods to infer a \textit{belief state} in a partially observable process.
 %The belief state amounts to the agent's world model of the environment that the agent can only partially observe.  
 The agent uses the belief state as a model of the environment that the agent observes through partial observations.  
-If the agent knows the POMDP's state-transition function and the observation function \textit{a priori}, the problem of computing the belief state has been mathematically solved, but proved to be generally intractable %(NP-Hard) 
+If 
+%the agent knows 
+the POMDP's observation and transition functions are known \textit{a priori}, 
+mathematical formulae to optimally compute the belief state have been established but proved to be generally intractable %(NP-Hard) 
 \cite{kaelbling1998planning}. 
-% It was, however, also proven that the implementation of the solution becomes intractable as the set of states and observation grows. 
+%the problem of computing the belief state has been mathematically solved, 
 %Without knowledge of the state transition and observation functions, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
 
 Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to interactively refine the world model by minimizing \textit{free energy}, or equivalently, prediction error and surprise \cite{friston_free-energy_2010}.
@@ -104,7 +107,8 @@ The present study examines how the ``Game Engine In The head'' (GEITH) can work 
 
 Joshua Tenenbaum and his research group have proposed the GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate basic dynamics of physics and interactions. 
 In the brain, the GEITH rests upon structures that are partially predefined by genes and then completed through ontogenetic development.  
-Similarly, it is possible to endow artificial agents and robots with a predefined software game engine, and expect them to refine the parameters of their game engine as they test their predictions in the world.
+Similarly, it is possible to endow artificial agents and robots with a predefined software game engine, and expect them to refine the parameters of their game engine and modify their predictions through ongoing interaction.
+%as they test their predictions in the world.
 
 This paper proposes an approach to designing autonomous agent that can refine their GEITH through their lifetime.
 The refinement of the game engine is assessed through 
@@ -125,7 +129,10 @@ Firstly, we do not consider sensory signals to be \textit{representational} of t
 The world is hidden to the agent so that a given state can return contrary sensory signals when acted upon differently by the agent.
 This implies a ``conceptual inversion'' of the interaction cycle in which action comes first and sensory signal comes second as an  \textit{outcome} of action. 
 Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the world. 
-The agent must infer the existence and properties of entities by itself through patterns of interactive experience. 
+The agent must infer the 
+%existence and properties of entities by itself 
+presences of \textit{causes} in the world 
+through patterns of interactive experience. 
 This view can be traced back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
 We nonetheless may associate some \textit{prior preference} with interactions. 
@@ -288,7 +295,7 @@ The GEITH thus always predicts straight withdrawal.
 
 Several videos of experiment runs are available online \cite{georgeon_petitcat_playlist}. 
 Here we analyze the representative run recorded in \cite{georgeon_petitcat_2024}.
-In this run, Petitcat encountered the point on Step 2 and interacted with it up to Step 60.
+In this run, Petitcat encountered the point on Step 1 and interacted with it up to Step 60.
 On Step 17, it missed the point but found it again on Step 20.
 This is shown in the \textit{outcome code prediction error plot} in Fig. \ref{fig:outcome}. 
 The fact that Peticat did not miss the point after Step 20 shows an improvement of the GEITH parameters.
@@ -296,7 +303,8 @@ The fact that Peticat did not miss the point after Step 20 shows an improvement 
 \begin{figure}
 	\includegraphics[width=\textwidth]{01_Outcome_code.pdf}
 	\caption{Outcome prediction error plot: 0 if predicted outcome = actual outcome (successful interaction), 1 otherwise (failed interaction).
-	Step 2: Petitcat did not expect to detect the point.
+	Step 0: Petitcat moved forward.
+	Step 1: he unexpectedly detected the point.
 	Steps 17: he expected to detect the point while translating forward but missed it.
 	Steps 18: he expected to not detect the point while turning but detected it.
 	Step 20: he did not predict detecting the point but did. 
@@ -335,7 +343,7 @@ The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} al
 \begin{figure}
 	\includegraphics[width=\textwidth]{07_Forward_duration_pe.pdf}
 	\caption{Duration prediction error for \texttt{forward} interactions.
-	Step 2 and 20: the forward translation was unexpectedly interrupted by the point detection.
+	Step 1 and 20: the forward translation was unexpectedly interrupted by the point detection.
 	Step 17: the forward duration was longer than expected because the robot did not detect the point.
 	Except for these events, the plot shows that the forward duration prediction error decreases.
 	From Step 63: Forward duration prediction errors occur as Petitcat discovers the arena border.
