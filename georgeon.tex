@@ -131,7 +131,7 @@ This implies a ``conceptual inversion'' of the interaction cycle in which action
 Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the world. 
 The agent must infer the 
 %existence and properties of entities by itself 
-presences of \textit{causes} in the world 
+presence of \textit{causes} in the world 
 through patterns of interactive experience. 
 This view can be traced back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
@@ -163,14 +163,13 @@ Our cognitive architecture encodes behaviors as \textit{composite interactions} 
 A primitive interaction is a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
 Examples are in Section \ref{sec:expe}. 
 The GEITH may consider some outcomes as resulting from the interaction with ``something'' in the environment.
-In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatial memory.
+In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatio-sequential memory.
 Next, the GEITH simulates subsequent interactions with phenomena to predict future outcomes. 
 The present study focuses on the simplest possible kind of phenomenon: points on the two-dimensional floor.
 
 We seeded the cognitive architecture with ``innate'' composite interactions that cause the robot to explore the environment and to interact with points encountered on the floor (Fig. \ref{fig:geith}, top-center). 
 In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters to reduce prediction error.
 %Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
-The cognitive architecture uses variables that represent the robot's \textit{emotional state} to selects composite interactions to try to enact.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
@@ -187,14 +186,14 @@ The cognitive architecture uses variables that represent the robot's \textit{emo
 		Right: the cognitive architecture selects the next behavior based on the emotional state and the expected outcome predicted by the GEITH.} \label{fig:geith}
 \end{figure}
 
+The cognitive architecture uses variables that represent the robot's \textit{emotional state} to selects composite interactions to try to enact.
 We use Hugo Lövheim's ``cube of emotions'' \cite{lovheim_new_2012} as a basic emotional model based on three neurotransmitters: dopamine (DA), serotonin (5-HT), and nor-adrenaline (NA) (Fig. \ref{fig:geith}, top right).
 This model associates dopamine with pleasure and reward-seeking behavior, serotonin with well-being and playful behavior, and nor-adrenaline with arousal and stress responses.
 It has been successfully used for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code studied by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
-The GEITH implements two levels of spatial working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
+The GEITH implements two levels of spatio-sequential working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
 The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
-%Using spatial-displacement information, the GEITH updates the position of the recent history of interactions in egocentric memory 
 (Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new allocentric reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
 This mechanism of coordinate conversion relates to that implemented by Howard Schneider's in his Causal Cognitive Architecture \cite{schneider_emergence_2024}, and to 
