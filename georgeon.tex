@@ -123,10 +123,10 @@ The decrease in prediction errors shows an improvement of the game engine.
 \section{Our hypothesis}
 
 We comply with active inference theory in several regards. 
-Firstly, we do not consider sensory signals to be \textit{representational} of the world's state. 
+Firstly, we do not assume that sensory signals are \textit{representational} of the world's state. 
 %Different sensory signals may come out of the same environment state depending on the agent's action. 
 % Each state of the world can generate different sensory signals depending on the action performed by the agent.
-The world is hidden to the agent so that a given state can return contrary sensory signals when acted upon differently by the agent.
+The world is hidden to the agent so that a given state may return contrary sensory signals when acted upon differently by the agent.
 This implies a ``conceptual inversion'' of the interaction cycle in which action comes first and the sensory signal comes second as an  \textit{outcome} of action. 
 Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the world. 
 The agent must infer the 
@@ -145,7 +145,7 @@ We also adopt \textit{prediction error} as a measure of the quality of the agent
 However, we are not using the gradient descent of the prediction error as a motivational principle to drive the learning process. 
 As we develop, our agent is not always driven by a value optimization process; it may also enact disinterested behaviors.
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
-For us, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
+In this implementation, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
 
 We are using a cognitive architecture that we designed previously based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
 The present article reports the integration of the new GEITH module within this cognitive architecture, as illustrated in Figure \ref{fig:geith}. 
@@ -256,7 +256,7 @@ The GEITH tries to simulate them, computes their spatio-temporal attributes acco
 	\item $\langle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
 	\item $\langle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
 	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$. 
+	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
 \end{enumerate}
 
 Neurotransmitter levels can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
@@ -367,7 +367,7 @@ When the robot finds an object, it instantiates a small local model in the refer
 This finite discrete model lends itself to regular active inference techniques. 
 We continue studying how to optimize the process of GEITH refinement in such local models using the active inference python library  \texttt{inferac\-tively-pymdp} \cite{Heins2022}.
 This approach, however, remains dependent on the causal structure of the GEITH itself.
-How the agent could improve the causal structure of the GEITH or find exceptions remains an open question related to explainable AI \cite{thorisson_explanation_2021}.
+How the robot could improve the causal structure of the GEITH or find exceptions remains an open question related to explainable AI \cite{thorisson_explanation_2021}.
 
 This study merely begins to explore the intricacies involved in autonomously refining the world model.
 We expect the next step to involve endowing the robot with the capacity to represent lines between points which could open the way to learning compositionality of phenomena. 
