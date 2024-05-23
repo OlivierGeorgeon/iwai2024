@@ -91,7 +91,7 @@ mathematical formulae to optimally compute the belief state have been establishe
 Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to interactively refine the world model by minimizing \textit{free energy}, or equivalently, prediction error and surprise \cite{friston_free-energy_2010}.
 The world model is represented as the distribution of the probability of each possible state of the world. 
 In essence, at each instant, the agent estimates which states are the most or least likely to be the actual state of the world.
-The \textit{expected information gained} is taken into account to select the next action.
+The \textit{expected information gained} to improve this estimation is taken into account to select the next action.
 %The agent selects the action that is expected to maximize the information gained to refine the probability distribution. 
 %The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
 Active inference has been used in robotics \cite{lanillos_active_2021} but generally under \textit{closed-world} settings in the sense that the set of possible states is known \textit{a priori}---a requirement for most of the mathematical apparatus of active inference. 
@@ -162,7 +162,7 @@ We start by implementing the minimal requirements she deems necessary for both s
 Our cognitive architecture encodes behaviors as \textit{composite interactions} which are sequences of \textit{primitive interactions}.
 A primitive interaction is a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
 Examples are given in Section \ref{sec:expe}. 
- GEITH may consider some results as the result of interaction with ``something'' in the environment.
+ GEITH may consider some of the outcomes as the result of interaction with ``something'' in the environment.
 In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatio-sequential memory.
 Next, GEITH simulates subsequent interactions with phenomena to predict future outcomes. 
 The present study focuses on the simplest possible kind of phenomenon: points on the two-dimensional floor.
@@ -216,7 +216,7 @@ The IMU measures the yaw during the enaction of interactions.
 Note that Petitcat cannot see the tape from a distance. 
 He has no camera, lidar, or odometer.
 What looks like eyes on his head is an ultrasonic echo-localization sensor not exploited in this experiment. 
-The emotion indicator on an RGB LED (Fig. \ref{fig:video}). 
+The emotion indicator is an RGB LED (Fig. \ref{fig:video}). 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
@@ -264,7 +264,7 @@ The prevalence of DA makes Petitcat initially select the $\langle$\texttt{forwar
 When he detects a point (by surprise), 5-HT increases to its max. 
 The prevalence of 5-HT and the presence of a point phenomenon in memory trigger the selection of innate interactions with the point.
 If the prediction errors do not decrease (that is, the prediction does not improve), 5-HT decreases.
-When 5-HT drops below or equal to DA, the $\langle$\texttt{forward}, \texttt{ no_tape}$\rangle$ interaction is again selected, causing Petitcat to explore new destinations. 
+When 5-HT drops below or equal to DA, the $\langle$\texttt{forward}, \texttt{ no\_tape}$\rangle$ interaction is again selected, causing Petitcat to explore new destinations. 
 
 Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
 Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
