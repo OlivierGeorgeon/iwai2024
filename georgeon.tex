@@ -32,18 +32,14 @@
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and
-Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
-%
-\authorrunning{Georgeon and Robertson}
+
+%\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
+%\authorrunning{Georgeon and Robertson}
+
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
-\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France 
-	\email{ogeorgeon@univ-catholyon.fr} \and
-SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and
-DOLL Labs, Lexington, MA, USA\\
-\email{paulr@dollabs.com}}
+%\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr} \and SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -51,13 +47,10 @@ DOLL Labs, Lexington, MA, USA\\
 We present a mobile robot that autonomously generates behaviors to calibrate its intuitive-physics engine, also known as the ``Game Engine in the Head'' (GEITH).
 Most POMDP and Active Inference learning techniques operate in a closed world in which the set of states is defined a priori. 
 However, implementing an ``innate'' GEITH and a set of interactive behaviors allowed us to avoid these limitations and design a mechanism for information search and learning in an open world. 
-%The robot selects behaviors that yield information to refine the GEITH parameters. 
-%At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
-%For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
 The results show that over a few tens of interaction cycles, the robot's prediction errors decrease, which shows an improvement in the GEITH calibration. 
 Moreover, the robot generates behaviors that human observers describe as playful.
 
-\keywords{Active infernce  \and developmental learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
+\keywords{Active inference  \and developmental learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
 \end{abstract}
 %
 %
@@ -137,7 +130,9 @@ This view can be traced back to Whitehead's process philosophy in which phenomen
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
 However, we may associate some \textit{prior preference} with interactions. 
 In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
-For a deeper examination of these principles in relation to the active inference literature, we refer the reader to our previous article \cite{georgeon_artificial_2024}.
+For a deeper examination of these principles in relation to the active inference literature, we refer the reader to 
+% our previous article 
+\cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
 %Indeed, to survive, cognitive beings should avoid bad predictions as much as they can. %generally stay away from bad surprises.
@@ -147,7 +142,9 @@ As we develop, our agent is not always driven by a value optimization process; i
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
 In this implementation, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
 
-We are using a cognitive architecture that we designed previously based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
+We are using a cognitive architecture 
+% that we designed previously 
+based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
 The present article reports the integration of the new GEITH module within this cognitive architecture, as illustrated in Figure \ref{fig:geith}. 
 The GEITH supports the simulation of behaviors before their selection by the cognitive architecture and their enaction by the robot. 
 At the beginning of each interaction cycle, the simulation computes the \textit{predicted outcome}.
