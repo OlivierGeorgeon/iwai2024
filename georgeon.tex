@@ -33,13 +33,13 @@
 % an abbreviated paper title here
 %
 
-%\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
-%\authorrunning{Georgeon and Robertson}
+\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
+\authorrunning{Georgeon and Robertson}
 
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
-%\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr} \and SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
+\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr} \and SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -81,10 +81,12 @@ mathematical formulae to optimally compute the belief state have been establishe
 %the problem of computing the belief state has been mathematically solved, 
 %Without knowledge of the state transition and observation functions, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
 
-Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to interactively refine the world model by minimizing \textit{free energy}, or equivalently, prediction error and surprise \cite{friston_free-energy_2010}.
+Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to interactively refine the world model by minimizing \textit{free energy}, or equivalently, prediction error 
+%and surprise 
+\cite{friston_free-energy_2010}.
 The world model is represented as the distribution of the probability of each possible state of the world. 
 In essence, at each instant, the agent estimates which states are the most or least likely to be the actual state of the world.
-The \textit{expected information gained} to improve this estimation is taken into account to select the next action.
+The \textit{expected information gained} to enhance this estimation is involved when selecting the next action.
 %The agent selects the action that is expected to maximize the information gained to refine the probability distribution. 
 %The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
 Active inference has been used in robotics \cite{lanillos_active_2021} but generally under \textit{closed-world} settings in the sense that the set of possible states is known \textit{a priori}---a requirement for most of the mathematical apparatus of active inference. 
@@ -131,7 +133,7 @@ Thirdly, no extrinsic goal is encoded in the agent in the form of goal states th
 However, we may associate some \textit{prior preference} with interactions. 
 In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
 For a deeper examination of these principles in relation to the active inference literature, we refer the reader to 
-% our previous article 
+our previous article 
 \cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
@@ -143,7 +145,7 @@ As we develop, our agent is not always driven by a value optimization process; i
 In this implementation, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
 
 We are using a cognitive architecture 
-% that we designed previously 
+that we designed previously 
 based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
 The present article reports the integration of the new GEITH module within this cognitive architecture, as illustrated in Figure \ref{fig:geith}. 
 The GEITH supports the simulation of behaviors before their selection by the cognitive architecture and their enaction by the robot. 
