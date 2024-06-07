@@ -178,11 +178,11 @@ It has been used successfully for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code studied by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
 The GEITH implements two levels of spatio-sequential working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
-The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
-(Fig. \ref{fig:video}, top right).
+The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system (Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new allocentric reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
-This mechanism of coordinate conversion relates to that implemented by Howard Schneider in his Causal Cognitive Architecture \cite{schneider_emergence_2024}, and to
-Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019}, according to which the brain records thousands of small spatio-temporal models to memorize interactions with different kinds of object.
+Comparable mechanisms of coordinate conversion have recently been found in the brain \cite{wang_egocentric_2020} and implemented in other software cognitive architectures \cite{schneider_emergence_2024}. 
+Phenomenon-centric frames relate to Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019}, according to which the brain records thousands of small spatio-temporal models to memorize interactions with different kinds of object.
+
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
 Once the robot has selected an object in the environment, its serotonin level increases, which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
