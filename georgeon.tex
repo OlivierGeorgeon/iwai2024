@@ -33,16 +33,16 @@
 % an abbreviated paper title here
 %
 
-\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702}  \and Béatrice de Montéra \inst{1, 3}\orcidID{0000-0002-3579-4870} \and Paul Robertson\inst{4}\orcidID{0000-0002-4477-0379}}
-\authorrunning{Georgeon, de Montéra, and Robertson}
+%\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702}  \and Béatrice de Montéra \inst{1, 3}\orcidID{0000-0002-3579-4870} \and Paul Robertson\inst{4}\orcidID{0000-0002-4477-0379}}
+%\authorrunning{Georgeon, de Montéra, and Robertson}
 
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
-%
-\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr}\\ \email{bdemontera@univ-catholyon.fr}  
-	\and SyCoSMA, LIRIS, CNRS, Villeurbanne, France 
-	\and MetaGenoPolis Unit, INRAE, Jouy-en-Josas, France \\
-	\and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
+
+%\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr}\\ \email{bdemontera@univ-catholyon.fr}  
+%	\and SyCoSMA, LIRIS, CNRS, Villeurbanne, France 
+%	\and MetaGenoPolis Unit, INRAE, Jouy-en-Josas, France \\
+%	\and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -119,7 +119,7 @@ Thirdly, no extrinsic goal is encoded in the agent in the form of goal states th
 However, we may associate some \textit{prior preference} with interactions. 
 In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
 For a deeper examination of these principles in relation to the active inference literature, we refer the reader to 
-our previous article 
+%our previous article 
 \cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
@@ -155,7 +155,6 @@ Next, GEITH simulates subsequent interactions with phenomena to predict future o
 
 We seeded the cognitive architecture with ``innate'' composite interactions that cause the robot to explore the environment and interact with points encountered on the floor (Fig. \ref{fig:geith}, top-center). 
 In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters allowing the tuning of primitive interactions to reduce the prediction error.
-%Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
