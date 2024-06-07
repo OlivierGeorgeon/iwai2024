@@ -32,18 +32,17 @@
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702} \and
-Paul Robertson\inst{3}\orcidID{0000-0002-4477-0379} }
-%
-\authorrunning{Georgeon and Robertson}
+
+\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702}  \and Béatrice de Montéra \inst{1, 3}\orcidID{0000-0002-3579-4870} \and Paul Robertson\inst{4}\orcidID{0000-0002-4477-0379}}
+\authorrunning{Georgeon, de Montéra, and Robertson}
+
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
-\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France 
-	\email{ogeorgeon@univ-catholyon.fr} \and
-SyCoSMA, LIRIS, CNRS, Villeurbanne, France \and
-DOLL Labs, Lexington, MA, USA\\
-\email{paulr@dollabs.com}}
+\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr}\\ \email{bdemontera@univ-catholyon.fr}  
+	\and SyCoSMA, LIRIS, CNRS, Villeurbanne, France 
+	\and MetaGenoPolis Unit, INRAE, Jouy-en-Josas, France \\
+	\and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -51,13 +50,10 @@ DOLL Labs, Lexington, MA, USA\\
 We present a mobile robot that autonomously generates behaviors to calibrate its intuitive-physics engine, also known as the ``Game Engine in the Head'' (GEITH).
 Most POMDP and Active Inference learning techniques operate in a closed world in which the set of states is defined a priori. 
 However, implementing an ``innate'' GEITH and a set of interactive behaviors allowed us to avoid these limitations and design a mechanism for information search and learning in an open world. 
-%The robot selects behaviors that yield information to refine the GEITH parameters. 
-%At the beginning of each interaction cycle, the robot uses its GEITH to run a simulation to compute predicted sensory signals. 
-%For each sensor, prediction error is the difference of the predicted sensory signal minus the actual sensory signal received at the end of the interaction cycle. 
 The results show that over a few tens of interaction cycles, the robot's prediction errors decrease, which shows an improvement in the GEITH calibration. 
 Moreover, the robot generates behaviors that human observers describe as playful.
 
-\keywords{Active infernce  \and developmental learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
+\keywords{Active inference  \and developmental learning \and enaction \and intrinsic motivation \and robotics \and core knowledge.}
 \end{abstract}
 %
 %
@@ -65,57 +61,42 @@ Moreover, the robot generates behaviors that human observers describe as playful
 \section{Introduction}
 \label{sec:intro}
 
-Cognitive beings are widely believed to possess some kind of actionable \textit{world model} that they use to generate intelligent behaviors.
-The development of this world model may begin during an early stage of life through basic physical inter\-actions---a stage called ``development of sensorimotor structures'' by psychologists such as Piaget \cite[p. 104]{dolle_pour_2005}. 
-%Developmental psychologist like Piaget have argued that the first stages of child development involved the ``development of sensorimotor structures'' acquired through interactive experience  \cite[p. 104]{dolle_pour_2005}. 
-%Kevin O'Regan called this process the learning of the ``mastery of sensorimotor contingencies'' \cite{oregan_sensorimotor_2001}. 
-However, transferring these ideas into artificial intelligence and robotics remains an open challenge.
-%How the mastery of the world model can be transposed into robotics and artificial intelligence, 
-%How they construct, maintain, and use this world model remains, 
-% in cognitive science and artificial intelligence. 
+%Cognitive beings are widely believed to possess some kind of actionable \textit{world model} that they use to generate intelligent behaviors.
+%The development of this world model may begin during an early stage of life through basic physical inter\-actions---a stage called ``development of sensorimotor structures'' by psychologists such as Piaget \cite[p. 104]{dolle_pour_2005}. 
+%However, transferring these ideas into artificial intelligence and robotics remains an open challenge.
 
-%This process has analogies in human development to what psychologists like Piaget called the ``development of sensorimotor structures'' which occurs during the first stages of child development \cite[p. 104]{dolle_pour_2005}. 
+In their book ``The pragmatic Turn'', Engel, Friston, and Kragic \cite{engel_pragmatic_2015} advocate a shift from a representation-centered to an ``action-oriented'' perspective on cognition.  
+Aligned with this shift, we present a robotics implementation to study the intricacy between action and perception.
+Closely related to pragmatic philosophy, Whitehead's process philosophy proposes useful concepts to describe perception from entities 
+having unconscious experience of connection to the world,
+%that may not be conscious 
+which he calls \textit{enduring objects} \cite{whitehead1929}. 
+% He gathers these entities in a broad category called \textit{enduring objects} \cite{whitehead1929}. 
+He distinguishes between two modes of perception: the mode of \textit{presentational immediacy} and the mode of \textit{causal efficiency} \cite{smith_social_2010}. 
+We apply these concepts to robotics: sensory input is provided to the robot in the mode of presentational immediacy, and the robot learns spatio-sequential patterns of actions and outcomes that account for the causal-efficiency mode of perception. 
+%The robot refines an actionable causal model from interactive experience to interact more efficiently with entities found in the world.  
 
+%The Partially Observable Markov Decision Process (POMDP) literature has proposed a broad range of methods to infer a \textit{belief state} in a partially observable process.
+%The agent uses the belief state as a model of the environment that the agent observes through partial observations.  
+%If the POMDP's observation and transition functions are known \textit{a priori}, mathematical formulae to optimally compute the belief state have been established but proved to be generally intractable %(NP-Hard) \cite{kaelbling1998planning}. 
 
-The Partially Observable Markov Decision Process (POMDP) literature has proposed a broad range of methods to infer a \textit{belief state} in a partially observable process.
-%The belief state amounts to the agent's world model of the environment that the agent can only partially observe.  
-The agent uses the belief state as a model of the environment that the agent observes through partial observations.  
-If 
-%the agent knows 
-the POMDP's observation and transition functions are known \textit{a priori}, 
-mathematical formulae to optimally compute the belief state have been established but proved to be generally intractable %(NP-Hard) 
-\cite{kaelbling1998planning}. 
-%the problem of computing the belief state has been mathematically solved, 
-%Without knowledge of the state transition and observation functions, the problem of inferring belief states in POMDPs does not lend itself to a mathematical analysis. 
-
-Karl Friston and his research group have proposed Active Inference \cite[e.g.]{smith_step-by-step_2022} as a method to interactively refine the world model by minimizing \textit{free energy}, or equivalently, prediction error and surprise \cite{friston_free-energy_2010}.
-The world model is represented as the distribution of the probability of each possible state of the world. 
+Karl Friston and his research group have proposed Active Inference as a method to interactively  learn the causes of sensory signals  by minimizing \textit{free energy}, or equivalently, prediction error \cite{friston_free-energy_2010}.
+Active inference has been used in the framework of Partially Observable Markov Decision Processes (POMDPs) to allow artificial agents to learn a causal model of the environment that they can only partially observe \cite{smith_step-by-step_2022}. 
+The causal model uses the distribution of the probability of each possible state of the world. 
 In essence, at each instant, the agent estimates which states are the most or least likely to be the actual state of the world.
-The \textit{expected information gained} is taken into account to select the next action.
-%The agent selects the action that is expected to maximize the information gained to refine the probability distribution. 
-%The estimation of expected information gained is computed through the variational free energy which involves a divergence between two probability distributions: the agent's world model $\mu$ and the joint probability distribution $g = P(O, S)$ of observations $O$ and world states $S$ called the \textit{generative model}. 
+The \textit{expected information gained} to enhance this estimation is involved when selecting the next action.
 Active inference has been used in robotics \cite{lanillos_active_2021} but generally under \textit{closed-world} settings in the sense that the set of possible states is known \textit{a priori}---a requirement for most of the mathematical apparatus of active inference. 
-%Significant challenges remain when the robot is placed in an open world. 
-%and the relation from states to observations be known \textit{a priori}.
-%---an assumption that we avoid in the present study. %$S$ 
-%Moreover, computing the free energy remains too computationally intensive for our robotics experiment.
-%remain; however to  and the high number of interaction cycles to converge to a useful world model makes this method inapplicable in our case of a robot interacting with the open world. 
 
-When the robot is thrown into an open world, 
-the POMDP and active inference literature suggest that it needs prior assumptions about the world to cope with complexity \cite{georgeon_artificial_2024}. 
-The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain an open-world model and reduce prediction errors. 
+When the robot is thrown into an open world, the problem of learning the cause of sensory input remains open. 
+The POMDP and active inference literature suggest that the robot needs prior assumptions about the world to cope with complexity \cite{georgeon_artificial_2024}. 
+The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain a causal model of perception in the open-world and reduce prediction errors. 
 
 Joshua Tenenbaum and his research group have proposed GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate the basic dynamics of physics and interactions. 
 In the brain, the GEITH rests on structures that are partially predefined by genes and then completed through ontogenetic development.  
 Similarly, it is possible to endow artificial agents and robots with a predefined software game engine and expect them to refine the parameters of their game engine and modify their predictions through ongoing interaction.
-%as they test their predictions in the world.
-
-This paper proposes an approach to designing autonomous agents that can refine their GEITH throughout their lifetime.
 The refinement of the game engine is assessed through 
-% two methods. The first is performed by the robot itself by measuring 
 the prediction error of sensory signals. 
 The decrease in prediction errors shows an improvement of the game engine. 
-%The second is performed by the experimenter by assessing whether the game engine parameters converge towards a target range that indicates that the robot managed to calibrate its GEITH. 
 
 
 
@@ -123,21 +104,23 @@ The decrease in prediction errors shows an improvement of the game engine.
 \section{Our hypothesis}
 
 We comply with active inference theory in several regards. 
-Firstly, we do not consider sensory signals to be \textit{representational} of the world's state. 
+Firstly, we do not assume that sensory signals are \textit{representational} of the world's state. 
 %Different sensory signals may come out of the same environment state depending on the agent's action. 
 % Each state of the world can generate different sensory signals depending on the action performed by the agent.
-The world is hidden to the agent so that a given state can return contrary sensory signals when acted upon differently by the agent.
+The world is hidden to the agent so that a given state may return contrary sensory signals when acted upon differently by the agent.
 This implies a ``conceptual inversion'' of the interaction cycle in which action comes first and the sensory signal comes second as an  \textit{outcome} of action. 
 Secondly, we do not provide the agent with presupposed ontological knowledge about entities in the world. 
 The agent must infer the 
 %existence and properties of entities by itself 
 presence of \textit{causes} in the world 
 through patterns of interactive experience. 
-This view can be traced back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
+%This view can be traced back to Whitehead's process philosophy in which phenomenal experience involves abstracting entities out of events \cite{whitehead1929}. 
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
 However, we may associate some \textit{prior preference} with interactions. 
 In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
-For a deeper examination of these principles in relation to the active inference literature, we refer the reader to our previous article \cite{georgeon_artificial_2024}.
+For a deeper examination of these principles in relation to the active inference literature, we refer the reader to 
+our previous article 
+\cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
 %Indeed, to survive, cognitive beings should avoid bad predictions as much as they can. %generally stay away from bad surprises.
@@ -145,9 +128,12 @@ We also adopt \textit{prediction error} as a measure of the quality of the agent
 However, we are not using the gradient descent of the prediction error as a motivational principle to drive the learning process. 
 As we develop, our agent is not always driven by a value optimization process; it may also enact disinterested behaviors.
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
-For us, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
+In this implementation, prediction error reduction is not a means of improving the world model but a consequence of its improvement.
 
-We are using a cognitive architecture that we designed previously based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
+We are using a cognitive architecture 
+%that we 
+designed previously 
+based on sensorimotor and enactive principles \cite{georgeon_artificial_2024}. 
 The present article reports the integration of the new GEITH module within this cognitive architecture, as illustrated in Figure \ref{fig:geith}. 
 The GEITH supports the simulation of behaviors before their selection by the cognitive architecture and their enaction by the robot. 
 At the beginning of each interaction cycle, the simulation computes the \textit{predicted outcome}.
@@ -157,25 +143,25 @@ We investigate the core elements of the GEITH that are needed for the agent to r
 We draw inspiration from studies on \textit{core knowledge} in the brains of animals and human infants. 
 For example, Elizabeth Spelke and her colleagues argued for the existence of two core geometry systems that ``evolved before the emergence of the human species'':  
 ``The \textit{core navigation system} captures absolute distance and sense [..] but not relative length or angle; the \textit{core form analysis system} does the reverse'' \cite[p. 2789]{spelke_core_2012}.
-We start by implementing the minimal requirements she deems necessary for both systems, namely the ability to handle points and lines in spatial memory, the foundational elements of Euclidean geometry. 
+We start by implementing the minimal requirements she deems necessary for both systems, namely the ability to handle points in spatial memory, the foundational elements of Euclidean geometry. 
 
 Our cognitive architecture encodes behaviors as \textit{composite interactions} which are sequences of \textit{primitive interactions}.
 A primitive interaction is a \textit{control loop} that involves actuator commands, expected sensory feedback, spatio-temporal attributes, termination conditions, termination outcome, and prior preference. 
 Examples are given in Section \ref{sec:expe}. 
- GEITH may consider some results as the result of interaction with ``something'' in the environment.
+ GEITH may consider some of the outcomes as the result of interaction with ``something'' in the environment.
 In this case, the GEITH instantiates a data structure called a \textit{phenomenon}\footnote{Common-sense usage of the term \textit{phenomenon}: ``something'' that a cognitive being perceives in the environment. Technically: ``any useful grouping of a subset of spatio-temporal patterns experienced by an agent in an environment'' \cite[p. 8]{thorisson_explanation_2021}.} and localizes this phenomenon at the position of the interaction in spatio-sequential memory.
 Next, GEITH simulates subsequent interactions with phenomena to predict future outcomes. 
-The present study focuses on the simplest possible kind of phenomenon: points on the two-dimensional floor.
+%The present study focuses on the simplest possible kind of phenomenon: points on the two-dimensional floor.
 
 We seeded the cognitive architecture with ``innate'' composite interactions that cause the robot to explore the environment and interact with points encountered on the floor (Fig. \ref{fig:geith}, top-center). 
-In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters to reduce the prediction error.
+In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters allowing the tuning of primitive interactions to reduce the prediction error.
 %Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
 	\caption{The game engine within the cognitive architecture.
 		Bottom: the history of interactions enacted over time.
-		Rightward triangles: \texttt{forward}. Leftward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. Light-blue: \texttt{no\_tape}. Black: \texttt{tape}.
+		Rightward triangles: \texttt{forward}. Leftward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. shade: outcome \texttt{white} or \texttt{black}.
 		Center: the GEITH.
 		Red hexagon: the focus of attention localized at the position of the phenomenon. 
 		Magenta hexagon: the prompt is the localization of the next selected interaction's destination: \texttt{swipe} to the right.
@@ -213,10 +199,10 @@ The experiment reported here uses only two sensors.
 The \textit{floor luminosity sensor} is a bar of 5 infrared-reflective sensors directed to the floor.
 From this bar of sensors, we retrieve 4 possible signals:  \texttt{none},  \texttt{left},  \texttt{front}, or \texttt{right} signaling the absence or relative position of a black tape present beneath them.  
 The IMU measures the yaw during the enaction of interactions.
-Note that Petitcat cannot see the tape from a distance. 
+Note that Petitcat cannot see the black tape from a distance. 
 He has no camera, lidar, or odometer.
 What looks like eyes on his head is an ultrasonic echo-localization sensor not exploited in this experiment. 
-The emotion indicator on an RGB LED (Fig. \ref{fig:video}). 
+The emotion indicator is an RGB LED (Fig. \ref{fig:video}). 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_video.pdf}
@@ -241,10 +227,10 @@ For this experiment, we defined four possible commands: \texttt{forward}, \textt
 %they have been separated rather than using a direction attribute because they are conceptually different: moving toward or away from a target. 
 
 The control loop monitors the elapsed time, yaw, and floor luminosity. %, and the distance of echo signals during the enaction of interactions. 
-The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{no\_tape} or \texttt{tape}.
+The termination conditions are reaching the target duration or yaw, or detecting the black tape, making two possible outcomes: \texttt{white} or \texttt{black}.
 This gives eight primitive interactions identified by their tuple $\langle$command, outcome$\rangle$: 4 commands $\times$ 2 outcomes.
 % Note that Petitcat cannot ``see'' the tape but only ``feel'' it through its floor luminosity sensors when he passes over it.
-All interactions are given a zero prior preference except $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ which has a positive one.
+All interactions are given a zero prior preference except $\langle$\texttt{forward}, \texttt{white}$\rangle$ which has a positive one.
 Additionally, the robot returns the measured spatio-temporal attributes: measured duration (float), measured yaw (float), and black tape detection (none, left, front, right). 
 
 When the black tape is detected, the movement is interrupted and a ``reflex'' movement is performed to withdraw away from the tape by a few centimeters. 
@@ -253,21 +239,21 @@ When the detection is on the side, this withdrawal includes a rotation to the op
 We seeded the cognitive architecture with the four composite interactions below, which constitute ``innate'' ways for Petitcat to interact with points. 
 The GEITH tries to simulate them, computes their spatio-temporal attributes according to the position of the phenomenon in memory, and proposes those that are feasible in the current context.
 \begin{enumerate}
-	\item $\langle\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$
-	\item $\langle\langle$\texttt{swipe}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{turn}, \texttt{no\_tape}$\rangle$, $\langle$\texttt{forward}, \texttt{tape}$\rangle\rangle$. 
+	\item $\langle\langle$\texttt{forward}, \texttt{black}$\rangle\rangle$
+	\item $\langle\langle$\texttt{turn}, \texttt{white}$\rangle$, $\langle$\texttt{forward}, \texttt{black}$\rangle\rangle$
+	\item $\langle\langle$\texttt{swipe}, \texttt{white}$\rangle$, $\langle$\texttt{forward}, \texttt{black}$\rangle\rangle$
+	\item $\langle\langle$\texttt{swipe}, \texttt{white}$\rangle$, $\langle$\texttt{turn}, \texttt{white}$\rangle$, $\langle$\texttt{forward}, \texttt{black}$\rangle\rangle$
 \end{enumerate}
 
 Neurotransmitter levels can vary from 0 to 100 and are initialized at 50. DA prevails in case of equality.
-The prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{no\_tape}$\rangle$ interaction because it has a positive prior preference.
+The prevalence of DA makes Petitcat initially select the $\langle$\texttt{forward}, \texttt{white}$\rangle$ interaction because it has a positive prior preference.
 When he detects a point (by surprise), 5-HT increases to its max. 
 The prevalence of 5-HT and the presence of a point phenomenon in memory trigger the selection of innate interactions with the point.
-If the prediction errors do not decrease (that is, the prediction does not improve), 5-HT decreases.
-When 5-HT drops below or equal to DA, the $\langle$\texttt{forward}, \texttt{ no_tape}$\rangle$ interaction is again selected, causing Petitcat to explore new destinations. 
+If the prediction errors do not decrease (that is, the prediction is not longer improving), 5-HT decreases.
+When 5-HT drops below or equal to DA, the $\langle$\texttt{forward}, \texttt{white}$\rangle$ interaction is again selected, causing Petitcat to explore new destinations. 
 
 Prediction errors may concern both the outcome of primitive interactions and the spatio-temporal measures.
-Prediction errors on the outcome (\texttt{tape} predicted but \texttt{no\_tape} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
+Prediction errors on the outcome (\texttt{black} predicted but \texttt{white} occurred, or the reverse) mean that the selected primitive interaction failed and another interaction was actually enacted instead. 
 Failing primitive interactions cause the composite interaction to which they belong to abort, and NA to rise to its max.
 
 The GEITH uses a \textit{focus of attention} point and a \textit{prompt} point to compute the spatio-temporal attributes of interactions (Fig. \ref{fig:geith}, center). 
@@ -332,7 +318,7 @@ Fig. \ref{fig:yaw_re} shows that the yaw residual error decreases as the robot a
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{03_yaw_re.pdf}
-	\caption{Yaw residual error of interactions that have a \texttt{tape} outcome. 
+	\caption{Yaw residual error of interactions that have a \texttt{black} outcome. 
 		It shows a significant decrease as the robot interacts with the point.
 	} \label{fig:yaw_re}
 \end{figure}
@@ -367,13 +353,19 @@ When the robot finds an object, it instantiates a small local model in the refer
 This finite discrete model lends itself to regular active inference techniques. 
 We continue studying how to optimize the process of GEITH refinement in such local models using the active inference python library  \texttt{inferac\-tively-pymdp} \cite{Heins2022}.
 This approach, however, remains dependent on the causal structure of the GEITH itself.
-How the agent could improve the causal structure of the GEITH or find exceptions remains an open question related to explainable AI \cite{thorisson_explanation_2021}.
+How the robot could improve the causal structure of the GEITH or find exceptions remains an open question related to explainable AI \cite{thorisson_explanation_2021}.
 
-This study merely begins to explore the intricacies involved in autonomously refining the world model.
-We expect the next step to involve endowing the robot with the capacity to represent lines between points which could open the way to learning compositionality of phenomena. 
-We shall also examine how the robot can deal with limited persistence, disappearance, or displacement of objects. 
+%merely begins to explore the intricacies involved in developing and maintaining a causal model of perception.
+This study illustrates Whitehead's two modes of perception. 
+Mode 1, presentational immediacy (in the sense of ``seeing a color''), corresponds to the robot's boolean sensory input we label \texttt{white} and \texttt{black}. 
+Mode 2, causal efficiency (in the sense of ``seeing an object''), corresponds to the robot maintaining a causal model of the point on the floor. 
+We expect the next step to involve \textit{mode-2-perception} of lines between points which could open the way to learning compositionality of phenomena. 
+We shall also examine how the robot can perceive apparition, disappearance, and displacement of objects. 
 
-We are not claiming the robot can actually \textit{experience} emotions let alone have sentience. 
+Beyond studying perception, we follow a method that advances through analogies between robots and natural organisms, aiming to enhance our understanding of the potential becoming of agency in robots. 
+This method relates to the method of \textit{transduction} proposed by another philosopher of process philosophy, Gilbert Simondon \cite{simondon_individuation_2005}.
+We try to design robots that mimic traits of natural organisms such as perception, surprise, emotions, preferences.
+We are not claiming the robot can actually \textit{experience} these traits of agency, let alone have sentience. 
 The robot, nonetheless, generates behaviors that human observers easily interpret as lifelike, which could find applications in companion robotics.
 The robot seems to enjoy exploring for the mere pleasure of movement as it lights up in green (DA prevails); 
 it plays with the point as for practicing its skills as it lights up in white (5-HT prevails); 
@@ -388,7 +380,9 @@ In future experiments, we wish to study more precisely to what extent observers 
 
 \begin{credits}
 
-%\subsubsection{\ackname} A bold run-in heading in small font size at the end of the paper is
+\subsubsection{\ackname} Dr. de Montera acknowledges support by ANR under contract ANR-11-DPBS-0001.
+
+%A bold run-in heading in small font size at the end of the paper is
 %used for general acknowledgments, for example: This study was funded
 %by X (grant number Y).
 
