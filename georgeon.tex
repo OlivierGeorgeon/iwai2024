@@ -33,16 +33,16 @@
 % an abbreviated paper title here
 %
 
-\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702}  \and Béatrice de Montéra \inst{1, 3}\orcidID{0000-0002-3579-4870} \and Paul Robertson\inst{4}\orcidID{0000-0002-4477-0379}}
-\authorrunning{Georgeon, de Montéra, and Robertson}
+%\author{Olivier L. Georgeon\inst{1, 2}\orcidID{0000-0003-4883-8702}  \and Béatrice de Montéra \inst{1, 3}\orcidID{0000-0002-3579-4870} \and Paul Robertson\inst{4}\orcidID{0000-0002-4477-0379}}
+%\authorrunning{Georgeon, de Montéra, and Robertson}
 
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
-%
-\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr}\\ \email{bdemontera@univ-catholyon.fr}  
-	\and SyCoSMA, LIRIS, CNRS, Villeurbanne, France 
-	\and MetaGenoPolis Unit, INRAE, Jouy-en-Josas, France \\
-	\and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
+
+%\institute{UR CONFLUENCE: Sciences et Humanites (EA 1598), UCLy, France \email{ogeorgeon@univ-catholyon.fr}\\ \email{bdemontera@univ-catholyon.fr}  
+%	\and SyCoSMA, LIRIS, CNRS, Villeurbanne, France 
+%	\and MetaGenoPolis Unit, INRAE, Jouy-en-Josas, France \\
+%	\and DOLL Labs, Lexington, MA, USA\\ \email{paulr@dollabs.com}}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -71,6 +71,7 @@ Closely related to pragmatic philosophy, Whitehead's process philosophy proposes
 having unconscious experience of connection to the world,
 %that may not be conscious 
 which he calls \textit{enduring objects} \cite{whitehead1929}. 
+% He gathers these entities in a broad category called \textit{enduring objects} \cite{whitehead1929}. 
 He distinguishes between two modes of perception: the mode of \textit{presentational immediacy} and the mode of \textit{causal efficiency} \cite{smith_social_2010}. 
 We apply these concepts to robotics: sensory input is provided to the robot in the mode of presentational immediacy, and the robot learns spatiosequential patterns of actions and outcomes that account for the causal-efficiency mode of perception. 
 %The robot refines an actionable causal model from interactive experience to interact more efficiently with entities found in the world.  
@@ -93,9 +94,9 @@ The present study examines how the ``Game Engine In The head'' (GEITH) can work 
 Joshua Tenenbaum and his research group have proposed GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate the basic dynamics of physics and interactions. 
 In the brain,the GEITH rests on structures that are partially predefined by genes and then completed through ontogenetic development.  
 Similarly, it is possible to endow artificial agents and robots with a predefined software game engine and expect them to refine the parameters of their game engine and modify their predictions through ongoing interaction.
-%We propose an approach to designing autonomous agents that can refine their GEITH throughout their lifetime.
-The refinement of the game engine is assessed through
-the prediction error of the sensory signals. 
+
+The refinement of the game engine is assessed through 
+the prediction error of sensory signals. 
 The decrease in prediction errors shows an improvement of the game engine. 
 
 
@@ -118,8 +119,9 @@ through patterns of interactive experience.
 Thirdly, no extrinsic goal is encoded in the agent in the form of goal states that the agent should search based on reward or other criteria. 
 However, we may associate some \textit{prior preference} with interactions. 
 In short, the agent has no \textit{rewarding world states} but has \textit{rewarding interactions}. % (positive or negative).
-For a deeper examination of these principles in relation to the active inference literature, we refer the reader to
-our previous article
+
+For a deeper examination of these principles in relation to the active inference literature, we refer the reader to 
+%our previous article 
 \cite{georgeon_artificial_2024}.
 
 We also adopt \textit{prediction error} as a measure of the quality of the agent's world model. %, and minimizing surprise is a powerful motivator. 
@@ -155,7 +157,6 @@ Next, GEITH simulates subsequent interactions with phenomena to predict future o
 
 We seeded the cognitive architecture with ``innate'' composite interactions that cause the robot to explore the environment and interact with points encountered on the floor (Fig. \ref{fig:geith}, top center). 
 In other studies, we implemented the learning of new composite interactions \cite{georgeon_cash_2019}, but here we only examine the refinement of the GEITH parameters allowing the tuning of primitive interactions to reduce the prediction error.
-%Here we do not examine the learning of new composite interactions (we did in other studies \cite{georgeon_cash_2019}) but only the refinement of the GEITH parameters to reduce prediction error.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
@@ -179,11 +180,11 @@ It has been used successfully for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code studied by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
 The GEITH implements two levels of spatiosequential working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
-The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system %. 
-(Fig. \ref{fig:video}, top right).
+The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system (Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new allocentric reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
-This mechanism of coordinate conversion relates to that implemented by Howard Schneider in his Causal Cognitive Architecture \cite{schneider_emergence_2024}, and to
-Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019}, according to which the brain records thousands of small spatiotemporal models to memorize interactions with different kinds of object.
+Comparable mechanisms of coordinate conversion have recently been found in the brain \cite{wang_egocentric_2020} and implemented in other software cognitive architectures \cite{schneider_emergence_2024}. 
+Phenomenon-centric frames relate to Jeff Hawkins' thousand brain hypothesis \cite{hawkins_framework_2019}, according to which the brain records thousands of small spatio-temporal models to memorize interactions with different kinds of object.
+
 %We implemented Tenenbaum's idea to give a \textit{sleep}/\textit{awake} attribute to phenomena. If the GEITH detects that the phenomenon moves, it switches the attribute to \textit{awake}.
 
 Once the robot has selected an object in the environment, its serotonin level increases, which triggers behaviors of interaction with this object to calibrate its GEITH parameters. 
