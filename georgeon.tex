@@ -91,7 +91,7 @@ When the robot is thrown into an open world, the problem of learning the cause o
 The POMDP and active inference literature suggest that the robot needs prior assumptions about the world to cope with complexity \cite{georgeon_artificial_2024}. 
 The present study examines how the ``Game Engine In The head'' (GEITH) can work as a suitable prior assumption that an autonomous robot could use to maintain a causal model of perception in the open world and reduce prediction errors. 
 
-Joshua Tenenbaum and his research group have proposed GEITH \cite{battaglia_simulation_2013} as the capacity of cognitive beings to simulate the basic dynamics of physics and interactions. 
+Joshua Tenenbaum and his research group have proposed GEITH \cite{ullman_mind_2017} as the capacity of cognitive beings to simulate the basic dynamics of physics and interactions. 
 In the brain, the GEITH rests on structures that are partially predefined by genes and then completed through ontogenetic development.  
 Similarly, it is possible to endow artificial agents and robots with a predefined software game engine and expect them to refine the parameters of their game engine and modify their predictions through ongoing interaction.
 The refinement of the game engine is assessed through the prediction error of sensory signals. 
@@ -267,7 +267,7 @@ In addition to the number of failed interactions, we also expect the prediction 
 Our GEITH has about 20 parameters, but this experiment only involves \texttt{FLOOR\_SENSOR\_POSITION}, \texttt{FORWARD\_SPEED}, \texttt{WITHDRAWAL\_DIS\-TANCE}, and \texttt{SIDE\_WITH\-DRA\-WAL\_YAW}.
 Note that GEITH has no means to infer the absolute values of these parameters but can only adjust them in relation to each other.
 The GEITH cannot either predict that the point will be detected on the side of the floor luminosity sensor, which will cause a withdrawal with rotation. 
-The cognitive architecture makes the robot aim strait at the point.
+The cognitive architecture makes the robot aim straight at the point.
 The GEITH thus always predicts a straight withdrawal. 
 
 %Ideally, we would like the GEITH to find by itself the relations of causality that link parameters to prediction errors, but in this experiment, we predefined these relations.
