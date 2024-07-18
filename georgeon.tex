@@ -73,7 +73,7 @@ having unconscious experience of connection to the world,
 which he calls \textit{enduring objects} \cite{whitehead1929}. 
 % He gathers these entities in a broad category called \textit{enduring objects} \cite{whitehead1929}. 
 He distinguishes between two modes of perception: the mode of \textit{presentational immediacy} and the mode of \textit{causal efficiency} \cite{smith_social_2010}. 
-We apply these concepts to robotics: sensory input is provided to the robot in the mode of presentational immediacy, and the robot learns spatiosequential patterns of actions and outcomes that account for the causal-efficiency mode of perception. 
+We apply these concepts to robotics: sensory input is provided to the robot in the mode of presentational immediacy, and the robot learns spatio-sequential patterns of actions and outcomes that account for the causal-efficiency mode of perception. 
 %The robot refines an actionable causal model from interactive experience to interact more efficiently with entities found in the world.  
 
 %The Partially Observable Markov Decision Process (POMDP) literature has proposed a broad range of methods to infer a \textit{belief state} in a partially observable process.
@@ -97,7 +97,8 @@ Similarly, it is possible to endow artificial agents and robots with a predefine
 The refinement of the game engine is assessed through the prediction error of sensory signals. 
 The decrease in prediction errors shows an improvement of the game engine. 
 
-
+Compared with general Bayesian models classically used in active inference, GEITH adds the assumption that all the sensorimotor experiences can be localized in the 3D Euclidean space, at least approximately. 
+It implements predefined linear-algebra functions to compute spatial transformations (rotations and translations) between frames of reference.
 
 
 \section{Our hypothesis}
@@ -125,7 +126,8 @@ We also adopt \textit{prediction error} as a measure of the quality of the agent
 %Indeed, to survive, cognitive beings should avoid bad predictions as much as they can. %generally stay away from bad surprises.
 %As introduced in Section \ref{sec:intro}, 
 However, we are not using the gradient descent of the prediction error as a motivational principle to drive the learning process. 
-As we develop, our agent is not always driven by a value optimization process; it may also enact disinterested behaviors.
+As we develop, our agent is not always driven by a value optimization process; it may also enact behaviors that we call \textit{disinterested}.
+Disinterested behaviors can consist of aimless innate tendencies, or individual habits taken through the agent's lifetime.
 % We are investigating an alternative approach based on an innate set of behaviors that the robot may select depending on its \textit{emotional state}.  
 In this implementation, the reduction of prediction errors is not a means of improving the world model, but a consequence of its improvement.
 
@@ -157,7 +159,7 @@ In other studies, we implemented the learning of new composite interactions \cit
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{Figure_geith.pdf}
-	\caption{The game engine within the cognitive architecture.
+	\caption{The game engine within the cognitive architecture (derived from \cite{georgeon_artificial_2024}, Fig. 6).
 		Bottom: the history of interactions enacted over time.
 		Rightward triangles: \texttt{forward}. Leftward triangles: \texttt{backward}. Squares: \texttt{swipe}. Circles: \texttt{turn}. shade: outcome \texttt{white} or \texttt{black}.
 		Center: the GEITH.
@@ -176,7 +178,7 @@ This model associates dopamine with pleasure and reward seeking behavior, seroto
 It has been used successfully for simple emotional robotics.
 Our robot visually indicates its predominant neurotransmitter level using an intuitive color code studied by Max Talanov and his team: green for dopamine, white for serotonin, red for noradrenaline, and blue when all three neurotransmitter levels are low \cite{chebotareva_emotional_2019}.
 
-The GEITH implements two levels of spatiosequential working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
+The GEITH implements two levels of spatio-sequential working memory: \textit{egocentric} and \textit{allo-phenomenon-centric} (Fig. \ref{fig:geith}, center).  
 The interactions and displacements are received in the egocentric reference frame based on the position of sensors and translation speed given as GEITH parameters, and the yaw measured by the Inertial Measurement Unit (IMU) which plays a similar role as the vestibular system (Fig. \ref{fig:video}, top right).
 When the robot encounters a new phenomenon, the GEITH instantiates a new allocentric reference frame centered on this phenomenon to track the displacement of the robot relative to this phenomenon (Fig. \ref{fig:video}, bottom right). 
 Comparable mechanisms of coordinate conversion have recently been found in the brain \cite{wang_egocentric_2020} and implemented in other software cognitive architectures \cite{schneider_emergence_2024}. 
@@ -203,7 +205,7 @@ What looks like eyes on his head is an ultrasonic echo-localization sensor not e
 The emotion indicator is an RGB LED (Fig. \ref{fig:video}). 
 
 \begin{figure}
-	\includegraphics[width=\textwidth]{Figure_video.pdf}
+	\includegraphics[width=\textwidth]{Figure2_video.pdf}
 	\caption{Screenshot of a video example run \cite{georgeon_petitcat_2024}.
 		Left: Petitcat playing with a point made of a piece of black tape on the floor.
 		Top right: Petitcat's egocentric memory. Black segments: black tape detection events. 
@@ -328,8 +330,8 @@ The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} al
 	\caption{Duration prediction error for \texttt{forward} interactions.
 	Step 1 and 20: the forward translation was unexpectedly interrupted by the point detection.
 	Step 17: the forward duration was longer than expected because the robot did not detect the point.
-	Except for these events, the plot shows that the forward duration prediction error decreases.
-	From Step 63: Forward duration prediction errors occur as Petitcat discovers the arena border.
+	Except for these events, the plot shows that the forward duration prediction error decreases as the robot is interacting with the point from Step 1 to 62.
+	On Step 63: the robot moves away from the point and a forward duration prediction errors occur as he encounters a new object: the border of the arena.
 	} \label{fig:forward_re}
 \end{figure}
 
@@ -344,8 +346,10 @@ The adjustment of \texttt{FORWARD\_SPEED} and \texttt{WITHDRAWAL\_DIS\-TANCE} al
 
 We demonstrated a simple robot that managed to reduce intuitive-physics prediction errors in an open environment. 
 We drew inspiration from theories positing core knowledge in the brain that have innate origins.
-The robot's design rests upon the cognitive architecture, the game engine, the model of emotions, and a set of innate behaviors.
+Compared with our previous studies base on the same robot and earlier iterations of the cognitive architecture \cite{georgeon_artificial_2024}, the present study adds the model of emotion, the GEITH, and a set of innate behaviors.
 These elements are hard-coded in the robot, but what is not predefined is the set of world states and the ontology of objects in the world.
+
+%Compared with our previous studies base on the same robot and earlier iterations of the cognitive architecture, the present study implements the novel model of emotion and GEITH. 
 
 When the robot finds an object, it instantiates a small local model in the reference frame of this object. 
 This finite discrete model lends itself to regular active inference techniques. 
@@ -378,7 +382,9 @@ In future experiments, we would like to study more precisely to what extent obse
 
 \begin{credits}
 
-\subsubsection{\ackname} Dr. de Montera acknowledges support by ANR under contract ANR-11-DPBS-0001.
+\subsubsection{\ackname}
+Dr. de Montera acknowledges support by ANR under contract ANR-11-DPBS-0001.
+Dr. Robertson acknowledges that this material is based upon work supported by the Defense Advanced Research Projects Agency (DARPA), USA under Contract No. HR001120C0035.
 
 %A bold run-in heading in small font size at the end of the paper is
 %used for general acknowledgments, for example: This study was funded
